@@ -1,0 +1,76 @@
+/* Navbar container */
+body {
+    background-color: #222;
+}
+
+.navbar {
+  overflow: hidden;
+  background-color: #333;
+  font-family: Arial;
+  display: flex;
+}
+
+/* Links inside the navbar */
+.navbar a {
+  float: left;
+  font-size: 22px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
+  text-decoration: none;
+}
+
+.navbar .logo {
+    margin-left: 20%;
+    margin-right: 10%;
+}
+
+.navbar .button {
+    width: 60%;
+}
+
+/* Add a red background color to navbar links on hover */
+.navbar a:hover {
+  background-color: red;
+}
+
+.main {
+    box-sizing: border-box;
+    margin-left: 10%;
+    margin-right: 5%;
+    width: 60%;
+    float: left;
+}
+
+.main .content {
+    margin-top: 5%;
+    position: relative;
+    min-height: 75px;
+    color: white;
+    width: 100%;
+}
+
+.main .post {
+    background-color: #333;
+    border: 1px solid #21262a;
+    border-radius: 8px;
+}
+
+.main .post header {
+    margin: 3%;
+}
+
+.main .post .title {
+    font-family: Arial;
+    font-size: 22px;
+    text-decoration: none;
+    color: #e0e3ea;
+}
+
+.main .post .title:hover {
+    color: #004cff;
+}
+
+.main .post img {
+    margin-bottom: 2%;
+}

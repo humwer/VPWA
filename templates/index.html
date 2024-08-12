@@ -1,9 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 class="title">
-  VAFE (Vulnerable Application Final Exam)
-</h1>
-<img src="/static/logo.png" alt="VAFE" width="780" height="440"><br>
+<div class="main content">
+  <div class="main post">
+    <header>
+      <a class="title" href="#post1">Добро пожаловать на нашу площадку!</a>
+    </header>
+    <div>
+      <img src="{{ url_for('static', filename='logo.png') }}" width="600" height="600">
+    </div>
+  </div>
+</div>
+<div class="main profile">
 
+</div>
 {% endblock %}
