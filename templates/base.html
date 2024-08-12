@@ -5,7 +5,7 @@
         <meta charset="utf-8">
         <meta http-equiv="X-UA-Compatible" content="IE=edge">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>VAFE (Vulnerable Application Final Exam)</title>
+        <title>VPWA (Vulnerable Portal Web Application)</title>
         <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
         <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     </head>
@@ -13,19 +13,17 @@
     <body>
         <div class="navbar">
             <div class="navbar logo">
-                <img src="{{ url_for('static', filename='VAFE.png') }}" alt="VAFE" width="150" height="50">
+                <a href="/"><img src="{{ url_for('static', filename='VPWA.png') }}" alt="VAFE" width="200" height="50"></a>
             </div>
             <div class="navbar button">
-                <a href="#1">Главная</a>
+                <a href="/">Главная</a>
                 <a href="#2">Пользователи</a>
                 <a href="#3">Загрузить</a>
-                <a href="#4">Войти</a>
+                <a href="/login">Войти</a>
             </div>
         </div>
-        <div class="main">
-            {% block content %}
-            {% endblock %}
-        </div>
+        {% block content %}
+        {% endblock %}
     </body>
 
 </html>

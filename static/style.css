@@ -11,7 +11,7 @@ body {
 }
 
 /* Links inside the navbar */
-.navbar a {
+.navbar .button a {
   float: left;
   font-size: 22px;
   color: white;
@@ -22,7 +22,7 @@ body {
 
 .navbar .logo {
     margin-left: 20%;
-    margin-right: 10%;
+    margin-right: 7%;
 }
 
 .navbar .button {
@@ -30,8 +30,8 @@ body {
 }
 
 /* Add a red background color to navbar links on hover */
-.navbar a:hover {
-  background-color: red;
+.navbar .button a:hover {
+  background-color: #004cff;
 }
 
 .main {
@@ -73,4 +73,72 @@ body {
 
 .main .post img {
     margin-bottom: 2%;
+}
+
+.login {
+    box-sizing: border-box;
+    margin-top: 3%;
+    margin-left: 20%;
+    margin-bottom: 5%;
+    width: 60%;
+    float: left;
+}
+
+.login .post {
+    margin: 0;
+    margin-left: 20%;
+    background-color: #333;
+    border: 1px solid #21262a;
+    border-radius: 8px;
+}
+
+.login .title {
+    color: #e0e3ea;
+    text-align: center;
+    font-family: Arial;
+    font-size: 22px;
+    font-weight: 800;
+    line-height: 20px;
+}
+
+.login .input {
+    display: grid;
+}
+
+.login .input * {
+    margin-bottom: 3%;
+}
+
+.login .input button {
+    margin-top: 10%;
+    background-color: #004cff;
+    line-height: 30px;
+    border: 0;
+    border-radius: 8px;
+}
+
+.login .input button:hover {
+    background-color: #0040d5;
+}
+
+.login .input input {
+    background-color: #222;
+    color: #e0e3ea;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 6px;
+    min-height: 30px;
+}
+
+.login .register {
+    color: #e0e3ea;
+    text-decoration: none;
+}
+
+.login .register:hover {
+    color: #004cff;
+}
+
+.login .form {
+    color: #e0e3ea;
 }

@@ -1,17 +1,16 @@
 {% extends "base.html" %}
 
 {% block content %}
-<div class="main content">
-  <div class="main post">
-    <header>
-      <a class="title" href="#post1">Добро пожаловать на нашу площадку!</a>
-    </header>
-    <div>
-      <img src="{{ url_for('static', filename='logo.png') }}" width="600" height="600">
+<div class="main">
+  <div class="main content">
+    <div class="main post">
+      <header>
+        <a class="title" href="#post1">Добро пожаловать на нашу площадку!</a>
+      </header>
+      <div>
+        <img src="{{ url_for('static', filename='logo.png') }}" width="600" height="600">
+      </div>
     </div>
   </div>
-</div>
-<div class="main profile">
-
 </div>
 {% endblock %}
