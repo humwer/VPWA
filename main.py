@@ -16,7 +16,8 @@ def index():
         context_login = True
     if username == 'admin':
         context_admin = True
-    context = {"login": context_login, "username": username, "admin": [context_admin, app.flag_auth]}
+    context = {"login": context_login, "username": username, "admin": [context_admin, app.flag_auth],
+               'posts': get_posts()}
     res = make_response(render_template("index.html", context=context))
     return res
 

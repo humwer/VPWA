@@ -31,23 +31,22 @@ body {
 }
 
 .navbar .logo {
-    margin-left: 20%;
-    margin-right: 7%;
+    margin-left: 400px;
+    min-width: 10%;
 }
 
 .navbar .button {
-    width: 60%;
+    margin-left: 10px;
+    min-width: 50%;
 }
 
-/* Add a red background color to navbar links on hover */
 .navbar .button a:hover {
   background-color: #004cff;
 }
 
 .main {
     box-sizing: border-box;
-    margin-left: 10%;
-    margin-right: 5%;
+    margin-left: 200px;
     width: 60%;
     float: left;
 }
@@ -64,6 +63,7 @@ body {
     background-color: #333;
     border: 1px solid #21262a;
     border-radius: 8px;
+    margin-bottom: 2%;
 }
 
 .main .post header {
@@ -74,15 +74,44 @@ body {
     font-family: Arial;
     font-size: 22px;
     text-decoration: none;
-    color: #e0e3ea;
+    color: white;
 }
 
 .main .post .title:hover {
     color: #004cff;
 }
 
+.main .post .author {
+    margin: 0;
+    margin-top: 1%;
+    font-family: Arial;
+    font-size: 16px;
+    text-decoration: none;
+    color: white;
+}
+
+.main .post .tags {
+    margin: 0;
+    margin-left: 5%;
+    padding-bottom: 2%;
+    font-family: Arial;
+    font-size: 14px;
+    text-decoration: none;
+}
+
+.main .post .tags .tag {
+    color: #afafaf;
+    margin: 0;
+    margin-left: 1%;
+}
+.main .post .tags .tag:hover {
+    color: white;
+}
+
 .main .post img {
-    margin-bottom: 2%;
+    margin: 0;
+    margin-left: 5%;
+    margin-bottom: 1%;
 }
 
 .login {

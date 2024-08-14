@@ -3,18 +3,27 @@
 {% block content %}
 <div class="main">
   <div class="main content">
+    {% if not context.admin.0 %}
+    <span>Мой текущий секрет: {{ context.admin.1 }}</span>
+    {% endif %}
+    {% for post in context.posts %}
     <div class="main post">
+      {% if post.visible %}
       <header>
-        {% if context.admin.0 %}
-        <a class="title" href="#post1">Добро пожаловать на нашу площадку!</a><span style="color: #ff0000;"> {{ context.admin.1 }} </span>
-        {% else %}
-        <a class="title" href="#post1">Добро пожаловать на нашу площадку!</a>
-        {% endif %}
+        <a class="title" href="/posts/{{post.id}}">{{post.title}}</a>
+        <p class="author">Автор: {{ post.author }}</p>
       </header>
       <div>
-        <img src="{{ url_for('static', filename='logo.png') }}" width="600" height="600">
+        <img src="{{ post.path }}" width="600" height="600">
       </div>
+      <div class="tags">
+        {% for tag in post.tags %}
+        <span class="tag" style="color: #ff0000;">{{tag}}</span>
+        {% endfor %}
+      </div>
+      {% endif %}
     </div>
+    {% endfor %}
   </div>
 </div>
 {% endblock %}

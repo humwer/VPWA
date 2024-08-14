@@ -30,7 +30,6 @@ def validate_registration(login: str, password: str, confirm_password: str) -> t
     conn, cursor = connect_to_db()
     query = f'SELECT username FROM users WHERE username like "{login}"'
     result = cursor.execute(query).fetchone()
-    print(result)
     if result:
         if login != result[0]:
             if login.lower() == 'support':
@@ -68,3 +67,14 @@ def delete_session(session: str):
     query = f'UPDATE sessions SET session="" WHERE session="{session}"'
     cursor.execute(query)
     conn.commit()
+
+
+def get_posts():
+    conn, cursor = connect_to_db()
+    query = f'SELECT * FROM posts'
+    posts = cursor.execute(query).fetchall()
+    data = []
+    for post in posts:
+        data.append({'id': post[0], 'author': post[1], 'title': post[2],
+                     'tags': post[3].split(','), 'path': post[4], 'visible': post[5]})
+    return data
