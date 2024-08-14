@@ -14,7 +14,7 @@ app.db_name = 'sqli.db'
 host = "0.0.0.0"
 port = 6177
 # ----------------<
-app.flag_auth = ""
+app.flag_auth = "FLAG{Us3r_1npu7_v4l1d4t10n_1s_1mp0r74n7!}"
 app.flag_sqli = "FLAG{D0_u_l1k3_SQL_1nj3ct10ns?}"
 app.flag_xss = ""
 app.flag_ssti = ""
@@ -49,7 +49,7 @@ def prepare_db():
     adm_pass = hashlib.md5("$up3rm3g4d1ff1cul7p@$$w0rd".encode()).hexdigest()
     sup_pass = hashlib.md5("123456".encode()).hexdigest()
 
-    queries = ["""
+    queries = ['PRAGMA case_sensitive_like=ON;', """
         CREATE TABLE IF NOT EXISTS "users" (
                 "id"    INTEGER NOT NULL UNIQUE,
                 "username"      TEXT(3, 50) NOT NULL UNIQUE,

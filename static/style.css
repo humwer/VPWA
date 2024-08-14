@@ -15,9 +15,19 @@ body {
   float: left;
   font-size: 22px;
   color: white;
+  font-weight: 600;
   text-align: center;
   padding: 14px 16px;
   text-decoration: none;
+}
+
+.navbar .info a {
+  text-decoration: none;
+  float: left;
+  font-size: 16px;
+  color: white;
+  text-align: center;
+  padding: 14px 16px;
 }
 
 .navbar .logo {
@@ -93,12 +103,28 @@ body {
 }
 
 .login .title {
-    color: #e0e3ea;
+    color: white;
     text-align: center;
     font-family: Arial;
     font-size: 22px;
     font-weight: 800;
     line-height: 20px;
+}
+
+.login .msg {
+    text-align: center;
+    font-family: Arial;
+    font-size: 16px;
+    font-weight: 800;
+    line-height: 20px;
+}
+
+.success {
+    color: #00f719;
+}
+
+.failure {
+    color: #f70000;
 }
 
 .login .input {
@@ -131,7 +157,7 @@ body {
 }
 
 .login .register {
-    color: #e0e3ea;
+    color: white;
     text-decoration: none;
 }
 

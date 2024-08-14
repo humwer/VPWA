@@ -5,10 +5,18 @@
   <div class="login post">
     <form class="login form" method="post">
       <p class="login title">Регистрация</p>
+      {% if context.msg %}
+        {% if 'Новый' in context.msg %}
+        <p class="login msg success">{{ context.msg }}</p>
+        {% else %}
+        <p class="login msg failure">{{ context.msg }}</p>
+        {% endif%}
+      {% else %}
+      {% endif %}
       <div class="login input">
         <input type="text" placeholder="Логин" name="login" required>
         <input type="password" placeholder="Пароль" name="password" required>
-        <input type="text" placeholder="Повторите пароль" name="password_check" required>
+        <input type="password" placeholder="Повторите пароль" name="confirm_password" required>
         <button type="submit"><span>Зарегистрироваться</span></button>
       </div>
     </form>

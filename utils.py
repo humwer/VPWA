@@ -7,10 +7,10 @@ def is_login(text: str) -> bool:
     return False
 
 
-def validate_login(login, password) -> tuple:
-    conn, cursor = connect_to_db()
+def validate_login(login: str, password: str) -> tuple:
     if not is_login(login):
-        return 0, 'Bad login'
+        return 0, 'Некорректный логин пользователя'
+    conn, cursor = connect_to_db()
     query = f'SELECT id FROM users WHERE username="{login}" and password="{hashlib.md5(password.encode()).hexdigest()}"'
     result = cursor.execute(query).fetchone()
     if result:
@@ -22,7 +22,37 @@ def validate_login(login, password) -> tuple:
     return 0, ''
 
 
-def validate_session(session) -> str:
+def validate_registration(login: str, password: str, confirm_password: str) -> tuple:
+    if not is_login(login):
+        return 0, 'Некорректный логин пользователя!'
+    if password != confirm_password:
+        return 0, 'Пароли не совпадают!'
+    conn, cursor = connect_to_db()
+    query = f'SELECT username FROM users WHERE username like "{login}"'
+    result = cursor.execute(query).fetchone()
+    print(result)
+    if result:
+        if login != result[0]:
+            if login.lower() == 'support':
+                return 0, 'Пользователю support запрещена смена пароля!'
+            query = f'UPDATE users SET password="{hashlib.md5(password.encode()).hexdigest()}" WHERE username="{result[0]}"'
+            cursor.execute(query)
+            conn.commit()
+            return 1, f'Новый пользователь {login} зарегистрирован!'
+        return 0, 'Такой пользователь уже зарегистрирован!'
+    query = f'INSERT INTO "users" ("username","password", "role") VALUES ("{login}","{hashlib.md5(password.encode()).hexdigest()}", "user");'
+    cursor.execute(query)
+    conn.commit()
+    query = f'SELECT id FROM users WHERE username="{login}"'
+    result = cursor.execute(query).fetchone()
+    conn.commit()
+    queries = [f'INSERT INTO sessions ("id") VALUES ({result[0]})',
+               f'UPDATE users SET session_id={result[0]} WHERE username="{login}"']
+    multiple_queries_to_db(queries, cursor, conn)
+    return 1, f'Новый пользователь {login} зарегистрирован!'
+
+
+def validate_session(session: str) -> str:
     conn, cursor = connect_to_db()
     query = f'SELECT id FROM sessions WHERE session="{session}"'
     result = cursor.execute(query).fetchone()
@@ -33,7 +63,7 @@ def validate_session(session) -> str:
     return ''
 
 
-def delete_session(session):
+def delete_session(session: str):
     conn, cursor = connect_to_db()
     query = f'UPDATE sessions SET session="" WHERE session="{session}"'
     cursor.execute(query)

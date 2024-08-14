@@ -5,7 +5,11 @@
   <div class="main content">
     <div class="main post">
       <header>
+        {% if context.admin.0 %}
+        <a class="title" href="#post1">Добро пожаловать на нашу площадку!</a><span style="color: #ff0000;"> {{ context.admin.1 }} </span>
+        {% else %}
         <a class="title" href="#post1">Добро пожаловать на нашу площадку!</a>
+        {% endif %}
       </header>
       <div>
         <img src="{{ url_for('static', filename='logo.png') }}" width="600" height="600">

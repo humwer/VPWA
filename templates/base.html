@@ -25,6 +25,12 @@
                 <a href="/login">Войти</a>
                 {% endif %}
             </div>
+            <div class="navbar info">
+                {% if context.username %}
+                <a href="/profile/#">Вы вошли под пользователем <b style="color: #ff0000;">{{context.username}}</b></a>
+                {% else %}
+                {% endif %}
+            </div>
         </div>
         {% block content %}
         {% endblock %}
