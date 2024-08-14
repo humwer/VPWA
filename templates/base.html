@@ -19,7 +19,11 @@
                 <a href="/">Главная</a>
                 <a href="#2">Пользователи</a>
                 <a href="#3">Загрузить</a>
+                {% if context.login %}
+                <a href="/logout">Выйти</a>
+                {% else %}
                 <a href="/login">Войти</a>
+                {% endif %}
             </div>
         </div>
         {% block content %}

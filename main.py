@@ -1,4 +1,5 @@
 from settings import *
+from utils import *
 
 
 @app.route("/favicon.ico")
@@ -8,23 +9,51 @@ def favicon():
 
 @app.route("/")
 def index():
-    res = make_response(render_template("index.html"))
+    context_login = False
+    if validate_session(request.cookies.get('session')):
+        context_login = True
+    context = {"login": context_login}
+    res = make_response(render_template("index.html", context=context))
     return res
 
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
+    context = {}
     if request.method == "GET":
-        return make_response(render_template("login.html"))
+        if validate_session(request.cookies.get('session')):
+            return make_response(redirect('/'))
+        return make_response(render_template("login.html", context=context))
     else:
-        print(request.form['login'])
-        print(request.form['password'])
-        return make_response(render_template("login.html"))
+        is_ok, new_session = validate_login(request.form.get('login'), request.form.get('password'))
+        if is_ok:
+            res = make_response(redirect('/'))
+            res.set_cookie("session", new_session)
+            return res
+        else:
+            return make_response(render_template("login.html", context=context))
+
+
+@app.route("/logout", methods=['GET'])
+def logout():
+    if validate_session(request.cookies.get('session')):
+        delete_session(request.cookies.get('session'))
+    res = make_response(redirect('/'))
+    res.delete_cookie("session")
+    return res
 
 
 @app.route("/register", methods=['GET', 'POST'])
 def register():
+    context = {}
     if request.method == "GET":
-        return make_response(render_template("register.html"))
+        if validate_session(request.cookies.get('session')):
+            return redirect('/')
+        return make_response(render_template("register.html", context=context))
     else:
-        return make_response(render_template("register.html"))
+        return make_response(render_template("register.html", context=context))
+
+
+if __name__ == "__main__":
+    prepare()
+    app.run(host=host, port=port)
