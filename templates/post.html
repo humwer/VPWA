@@ -1,0 +1,58 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main">
+  <div class="main content">
+    <div class="main post">
+      <header>
+        <a class="title" href="/posts/{{context.post_id}}">{{context.post.title}}</a>
+        <p class="author">Автор: {{context.post.author}}</p>
+      </header>
+      <div>
+        <img src="{{context.post.path}}" width="600" height="600">
+      </div>
+      <div class="tags">
+        {% for tag in context.post.tags %}
+            <span class="tag">{{tag}}</span>
+        {% endfor %}
+      </div>
+    </div>
+    <div class="main post">
+        <header>
+            <span class="title">Комментарии</span>
+        </header>
+        {% for comment in context.comments %}
+        <div class="comment-blog">
+            <div class="info">
+                <a href="/posts/{{context.post_id}}#{{loop.index}}" class="number">#{{loop.index}}</a>
+                <a href="/profile/#" class="author">{{comment.username}}</a>
+            </div>
+            <div class="comment">
+                <p class="msg">{{comment.msg}}</p>
+            </div>
+        </div>
+        {% endfor %}
+        {% if context.login %}
+        <div>
+            <header>
+                <span class="title">Оставить комментарий</span>
+            </header>
+            <div class="comment-blog">
+                <form class="comment" method="post">
+                    <textarea class="msg" name="comment"></textarea>
+                    <input type="hidden" value="{{context.username}}" name="author"/>
+                    <input type="submit" value="Отправить"/>
+                </form>
+            </div>
+        </div>
+        {% else %}
+        <div>
+            <header>
+                <span class="title">Войдите, чтобы оставить комментарий!</span>
+            </header>
+        </div>
+        {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -69,7 +69,7 @@ def delete_session(session: str):
     conn.commit()
 
 
-def get_posts():
+def get_posts() -> list:
     conn, cursor = connect_to_db()
     query = f'SELECT * FROM posts'
     posts = cursor.execute(query).fetchall()
@@ -77,4 +77,21 @@ def get_posts():
     for post in posts:
         data.append({'id': post[0], 'author': post[1], 'title': post[2],
                      'tags': post[3].split(','), 'path': post[4], 'visible': post[5]})
+    return data
+
+
+def get_post(post_id: str) -> dict:
+    conn, cursor = connect_to_db()
+    query = f'SELECT * FROM posts WHERE id={post_id}'
+    post = cursor.execute(query).fetchone()
+    return post
+
+
+def get_comments_from_post(post_id: str) -> list:
+    conn, cursor = connect_to_db()
+    query = f'SELECT * FROM comments WHERE post_id={post_id}'
+    comments = cursor.execute(query).fetchall()
+    data = []
+    for comment in comments:
+        data.append({'username': comment[2], 'msg': comment[3]})
     return data

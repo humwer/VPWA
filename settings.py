@@ -59,21 +59,27 @@ def prepare_db():
 
     queries = ['PRAGMA case_sensitive_like=ON;', """
         CREATE TABLE IF NOT EXISTS "users" (
-                "id"    INTEGER NOT NULL UNIQUE,
+                "id"            INTEGER NOT NULL UNIQUE,
                 "username"      TEXT(3, 50) NOT NULL UNIQUE,
                 "password"      TEXT(3, 50) NOT NULL,
                 "role"          TEXT(3, 50) NOT NULL,
-                "session_id"              INTEGER,
+                "session_id"    INTEGER,
                 FOREIGN KEY(session_id) REFERENCES sessions(id),
                 PRIMARY KEY("id" AUTOINCREMENT)
         );""", """
         CREATE TABLE IF NOT EXISTS "flag" (
-                "id"    INTEGER NOT NULL UNIQUE,
+                "id"            INTEGER NOT NULL UNIQUE,
                 "flag_value"    TEXT(50)
         );""", """
+        CREATE TABLE IF NOT EXISTS "comments" (
+                "id"            INTEGER NOT NULL UNIQUE,
+                "post_id"       INTEGER NOT NULL,
+                "username"      TEXT(3, 50) NOT NULL,
+                "comment"       TEXT(200) NOT NULL
+        );""", """
         CREATE TABLE IF NOT EXISTS "sessions" (
-                "id"    INTEGER NOT NULL UNIQUE,
-                "session"    TEXT(32)
+                "id"            INTEGER NOT NULL UNIQUE,
+                "session"       TEXT(32)
         );""",
                f'INSERT INTO "sessions" ("id") VALUES (1), (2), (3), (4), (5);',
                f'INSERT INTO "users" ("id","username","password", "role", "session_id") '
@@ -97,7 +103,7 @@ def prepare_db():
                PRIMARY KEY("id" AUTOINCREMENT)
        );""",
                f'INSERT INTO "posts" ("id", "username", "title", "tags", "content_path", "visible") '
-               f'VALUES (1, "admin", "Добро пожаловать на нашу площадку!", "Image,Welcome", "/static/content_1.png", 1);',
+               f'VALUES (1, "admin", "Добро пожаловать на наш портал!", "Image,Welcome", "/static/content_1.png", 1);',
                f'INSERT INTO "posts" ("id", "username", "title", "tags", "content_path", "visible") '
                f'VALUES (2, "admin", "Технические работы!", "Test", "/static/content_2.jpg", 1);',
                ]
@@ -106,6 +112,21 @@ def prepare_db():
     cursor.close()
     print('[+] Database sqli.db was created!')
 
+def prepare_comments_db():
+    conn, cursor = connect_to_db()
+    queries = [
+        f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
+        f'VALUES (1, 1, "admin", "Всем привет! Добавил комментарии к постам, буду рад, если проверите их работу :)");',
+        f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
+        f'VALUES (2, 1, "C00lB0y", "Круто, прикрутили комментарии!");',
+        f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
+        f'VALUES (3, 1, "Franky", "С00lB0y, только спамь комментариями");',
+    ]
+    data = multiple_queries_to_db(queries, cursor, conn)
+    cursor.close()
+    print('[+] Comments to database sqli.db were add!')
+
 
 def prepare():
     prepare_db()
+    prepare_comments_db()

@@ -7,6 +7,11 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
+@app.errorhandler(404)
+def not_found(error):
+    return redirect('/'), 404
+
+
 @app.route("/")
 def index():
     context_login = False
@@ -20,6 +25,28 @@ def index():
                'posts': get_posts()}
     res = make_response(render_template("index.html", context=context))
     return res
+
+
+@app.route('/posts/<post_id>', methods=["GET", "POST"])
+def post(post_id):
+    context = {}
+    context_login = False
+    username = validate_session(request.cookies.get('session'))
+    if username:
+        context_login = True
+        context["username"] = username
+    context["login"] = context_login
+    context["post_id"] = post_id
+    comments = get_comments_from_post(post_id)
+    context['comments'] = comments
+    info_post = get_post(post_id)
+    context['post'] = {"author": info_post[1], "title": info_post[2], "tags": info_post[3].split(','),
+                       "path": info_post[4]}
+    if request.method == "GET":
+        return render_template('post.html', context=context)
+    else:
+        print(f"Из поста {id} отправили: {request.form}")
+        return make_response(render_template("post.html", context=context))
 
 
 @app.route("/login", methods=['GET', 'POST'])

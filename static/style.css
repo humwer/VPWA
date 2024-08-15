@@ -114,6 +114,64 @@ body {
     margin-bottom: 1%;
 }
 
+.comment-blog {
+    margin-left: 20px;
+}
+
+.comment-blog .info {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.comment-blog .info * {
+    margin: 0;
+    margin-right: 10px;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.comment-blog .info .number {
+    color: #e0e3ea;
+    text-decoration: none;
+    font-family: Arial;
+}
+
+.comment-blog .info .author {
+    font-size: 16px;
+    font-family: Arial;
+}
+
+.comment-blog .info .author:hover {
+    color: #004cff;
+}
+
+.comment-blog .comment * {
+    margin-top: 5px;
+    margin-bottom: 20px;
+    background-color: #222;
+    width: 95%;
+    min-height: 30px;
+    vertical-align: middle;
+}
+
+.comment-blog .comment input {
+    margin: 0;
+    background-color: white;
+    width: 97%;
+}
+
+.comment-blog .comment textarea {
+    color: white;
+    font-family: Arial;
+}
+
+.comment-blog .comment .msg {
+    padding: 10px;
+    padding-right: 5px;
+    font-size: 14px;
+    font-family: Arial;
+}
+
 .login {
     box-sizing: border-box;
     margin-top: 3%;
