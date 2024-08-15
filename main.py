@@ -9,7 +9,12 @@ def favicon():
 
 @app.errorhandler(404)
 def not_found(error):
-    return redirect('/'), 404
+    return redirect('/'), 302
+
+
+@app.errorhandler(500)
+def not_found(error):
+    return redirect('/'), 302
 
 
 @app.route("/")
@@ -45,8 +50,10 @@ def post(post_id):
     if request.method == "GET":
         return render_template('post.html', context=context)
     else:
-        print(f"Из поста {id} отправили: {request.form}")
-        return make_response(render_template("post.html", context=context))
+        if username != request.form.get("author"):
+            return make_response(render_template("post.html", context=context))
+        add_comment_to_post(post_id, request.form.get("author"), request.form.get("comment"))
+        return redirect(f'/posts/{post_id}')
 
 
 @app.route("/login", methods=['GET', 'POST'])

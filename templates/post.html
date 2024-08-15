@@ -28,7 +28,9 @@
                 <a href="/profile/#" class="author">{{comment.username}}</a>
             </div>
             <div class="comment">
+                {% autoescape false %}
                 <p class="msg">{{comment.msg}}</p>
+                {% endautoescape %}
             </div>
         </div>
         {% endfor %}
@@ -48,7 +50,7 @@
         {% else %}
         <div>
             <header>
-                <span class="title">Войдите, чтобы оставить комментарий!</span>
+                <a class="title" href="/login">Войдите, чтобы оставить комментарий!</a>
             </header>
         </div>
         {% endif %}

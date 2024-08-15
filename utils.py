@@ -18,7 +18,9 @@ def validate_login(login: str, password: str) -> tuple:
         query = f'UPDATE sessions SET session="{new_session}" WHERE id={result[0]}'
         cursor.execute(query)
         conn.commit()
+        cursor.close()
         return 1, new_session
+    cursor.close()
     return 0, ''
 
 
@@ -48,6 +50,7 @@ def validate_registration(login: str, password: str, confirm_password: str) -> t
     queries = [f'INSERT INTO sessions ("id") VALUES ({result[0]})',
                f'UPDATE users SET session_id={result[0]} WHERE username="{login}"']
     multiple_queries_to_db(queries, cursor, conn)
+    cursor.close()
     return 1, f'Новый пользователь {login} зарегистрирован!'
 
 
@@ -58,7 +61,9 @@ def validate_session(session: str) -> str:
     if result:
         query = f'SELECT username FROM users WHERE session_id={result[0]}'
         result = cursor.execute(query).fetchone()
+        cursor.close()
         return result[0]
+    cursor.close()
     return ''
 
 
@@ -67,12 +72,14 @@ def delete_session(session: str):
     query = f'UPDATE sessions SET session="" WHERE session="{session}"'
     cursor.execute(query)
     conn.commit()
+    cursor.close()
 
 
 def get_posts() -> list:
     conn, cursor = connect_to_db()
     query = f'SELECT * FROM posts'
     posts = cursor.execute(query).fetchall()
+    cursor.close()
     data = []
     for post in posts:
         data.append({'id': post[0], 'author': post[1], 'title': post[2],
@@ -84,6 +91,7 @@ def get_post(post_id: str) -> dict:
     conn, cursor = connect_to_db()
     query = f'SELECT * FROM posts WHERE id={post_id}'
     post = cursor.execute(query).fetchone()
+    cursor.close()
     return post
 
 
@@ -91,7 +99,29 @@ def get_comments_from_post(post_id: str) -> list:
     conn, cursor = connect_to_db()
     query = f'SELECT * FROM comments WHERE post_id={post_id}'
     comments = cursor.execute(query).fetchall()
+    cursor.close()
     data = []
     for comment in comments:
-        data.append({'username': comment[2], 'msg': comment[3]})
+        try:
+            data.append({'username': comment[2], 'msg': render_template_string(comment[3])})
+        except Exception as err:
+            data.append({'username': comment[2],
+                         'msg': render_template_string("<i>Возникла ошибка при формировании комментария</i>")})
     return data
+
+
+def add_comment_to_post(post_id: str, username: str, comment: str) -> bool:
+    try:
+        conn, cursor = connect_to_db()
+        for exclude in app.EXCLUDE_FOR_SSTI:
+            if exclude in comment:
+                comment = '<i>Возникла ошибка при формировании комментария</i>'
+        query = (f'INSERT INTO comments ("post_id", "username", "comment") '
+                 f'VALUES ({post_id}, "{username}", "{comment}");')
+        cursor.execute(query)
+        conn.commit()
+        cursor.close()
+        return True
+    except Exception as err:
+        print(f'[-] Ошибка: {err}')
+        return False

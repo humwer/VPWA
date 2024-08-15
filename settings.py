@@ -1,5 +1,5 @@
 from flask import (Flask, render_template_string, render_template, request, make_response, send_from_directory,
-                   redirect)
+                   redirect, url_for)
 from datetime import datetime
 from lxml import etree
 import sqlite3
@@ -14,16 +14,17 @@ app = Flask(__name__)
 app.DB_NAME = 'sqli.db'
 app.UPLOAD_FOLDER = '/static/'
 app.ALLOWED_EXTENSIONS = set(['svg', 'png', 'jpg', 'jpeg', 'gif'])
+app.EXCLUDE_FOR_SSTI = ('popen', 'write', 'os', 'import', 'mro', 'exec')
 host = "0.0.0.0"
 port = 6177
 # ----------------<
-app.flag_auth = "FLAG{Us3r_1npu7_v4l1d4t10n_1s_1mp0r74n7!}"
+app.flag_auth = "FLAG{N3w_funct10n_4_r3g1s7r4710n!}"
 app.flag_sqli = "FLAG{D0_u_l1k3_SQL_1nj3ct10ns?}"
 app.flag_xss = "FLAG{0ops_c00k13_w17h0u7_h77p_0n1y?}"
 app.flag_ssti = "FLAG{My_f4v0ur173_73mp1473s_1nj3c710n}"
 app.flag_xxe = "FLAG{1_7h0ugh7_w0u1d_b3_7h3_p1c7ur3}"
 app.flag_path = "FLAG{W4F_1sn7_7h3_pr0bl3m_t0_u?}"
-
+app.config['flag'] = app.flag_ssti
 
 # ---------------->
 
@@ -75,7 +76,8 @@ def prepare_db():
                 "id"            INTEGER NOT NULL UNIQUE,
                 "post_id"       INTEGER NOT NULL,
                 "username"      TEXT(3, 50) NOT NULL,
-                "comment"       TEXT(200) NOT NULL
+                "comment"       TEXT(200) NOT NULL,
+                PRIMARY KEY("id" AUTOINCREMENT)
         );""", """
         CREATE TABLE IF NOT EXISTS "sessions" (
                 "id"            INTEGER NOT NULL UNIQUE,
@@ -105,12 +107,17 @@ def prepare_db():
                f'INSERT INTO "posts" ("id", "username", "title", "tags", "content_path", "visible") '
                f'VALUES (1, "admin", "Добро пожаловать на наш портал!", "Image,Welcome", "/static/content_1.png", 1);',
                f'INSERT INTO "posts" ("id", "username", "title", "tags", "content_path", "visible") '
-               f'VALUES (2, "admin", "Технические работы!", "Test", "/static/content_2.jpg", 1);',
+               f'VALUES (2, "admin", "Технические работы!", "Test", "/static/content_2.jpg", 0);',
+               f'INSERT INTO "posts" ("id", "username", "title", "tags", "content_path", "visible") '
+               f'VALUES (3, "Alice", "Милый котик :)", "Cats,Image,Cute", "/static/content_3.jpg", 1);',
+               f'INSERT INTO "posts" ("id", "username", "title", "tags", "content_path", "visible") '
+               f'VALUES (4, "C00lB0y", "Хацкеры такие хацкеры", "Image,Humor", "/static/content_4.jpg", 1);',
                ]
 
     data = multiple_queries_to_db(queries, cursor, conn)
     cursor.close()
     print('[+] Database sqli.db was created!')
+
 
 def prepare_comments_db():
     conn, cursor = connect_to_db()
@@ -120,7 +127,18 @@ def prepare_comments_db():
         f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
         f'VALUES (2, 1, "C00lB0y", "Круто, прикрутили комментарии!");',
         f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
-        f'VALUES (3, 1, "Franky", "С00lB0y, только спамь комментариями");',
+        f'VALUES (3, 1, "Franky", "<b>С00lB0y</b>, только спамь комментариями");',
+
+        f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
+        f'VALUES (4, 2, "admin", "<b>Support</b>, напомни, я тебе же говорил где лежат ключи для апи? ^.^");',
+        f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
+        f'VALUES (5, 2, "Support", "Ага, ты сказал сюда смотреть /tmp/api_keys/api.txt<br>А что? >_> ");',
+        f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
+        f'VALUES (6, 2, "admin", "Да так... Слушай, видел я тебе отдельную вкладку для инструкции запилил? :)");',
+        f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
+        f'VALUES (7, 2, "Support", "Не-а, но сейчас гляну. Кстати, а ничего что мы здесь детали обсуждаем? ._.");',
+        f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
+        f'VALUES (8, 2, "admin", "Да не парься, я просто скрою этот пост и всё будет ок :)");',
     ]
     data = multiple_queries_to_db(queries, cursor, conn)
     cursor.close()

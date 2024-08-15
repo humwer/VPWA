@@ -5,9 +5,10 @@
   <div class="login post">
     <form class="login form" method="post">
       <p class="login title">Войти</p>
-      {% if context.msg %}
+      {% if 'Новый' in context.msg %}
+        <p class="login msg success">{{ context.msg }}</p>
+        {% else %}
         <p class="login msg failure">{{ context.msg }}</p>
-      {% else %}
       {% endif %}
       <div class="login input">
         <input type="text" placeholder="Логин" name="login" required>
