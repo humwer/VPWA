@@ -69,6 +69,24 @@ def post(post_id):
         return redirect(f'/posts/{post_id}')
 
 
+@app.route('/create', methods=["GET", "POST"])
+def new_post():
+    context_login = False
+    username = validate_session(request.cookies.get('session'))
+    if username:
+        context_login = True
+    context = {"login": context_login, "username": username}
+    if request.method == "GET":
+        return make_response(render_template("add_post.html", context=context))
+    else:
+        if not context_login:
+            return make_response(render_template("add_post.html", context=context))
+        info_post = request.form.to_dict()
+        info_post['username'] = username
+        upload_file(request.files['file'], info_post)
+        return make_response(render_template("add_post.html", context=context))
+
+
 @app.route("/login", methods=['GET', 'POST'])
 def login():
     msg = ''

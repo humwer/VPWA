@@ -16,7 +16,7 @@
   </div>
   <div class="main content">
     {% if context.admin.0 %}
-    <span class="main post">Мой текущий секрет: <b style="color: #ff0000">{{ context.admin.1 }}</b></span>
+    <span class="main post" style="text-align: center"><b>{{ context.admin.1 }}</b></span>
     {% endif %}
     {% for post in context.posts %}
     <div class="main post">

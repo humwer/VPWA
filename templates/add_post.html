@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main">
+  <div class="main content">
+    <div class="main create-post">
+      <header>
+        <p class="create-title">Добавление нового поста</p>
+      </header>
+      {% if context.login %}
+      <form method="post" enctype="multipart/form-data">
+        <input class="create-form-title" type="text" placeholder="Заголовок" name="title"/>
+        <input class="create-form-tags" type="text" placeholder="Теги" name="tags"/>
+        <input class="create-form-file" type="file" name="file" accept=".svg, .png, .jpg, .jpeg, .gif"/>
+        <input class="create-form-submit" type="submit"/>
+      </form>
+      {% else %}
+      <header>
+          <a class="create-title" href="/login"><p>Войдите, чтобы выложить пост!</p></a>
+      </header>
+      {% endif %}
+  </div>
+</div>
+{% endblock %}

@@ -14,7 +14,8 @@ import re
 app = Flask(__name__)
 app.DB_NAME = 'sqli.db'
 app.UPLOAD_FOLDER = '/static/'
-app.ALLOWED_EXTENSIONS = set(['svg', 'png', 'jpg', 'jpeg', 'gif'])
+app.ALLOWED_EXTENSIONS = ('gif', 'jpg', 'jpeg', 'png', 'svg')
+app.ALLOWED_MIMETYPE = ('image/gif', 'image/jpeg', 'image/png', 'image/svg+xml')
 app.EXCLUDE_FOR_SSTI = ('popen', 'write', 'os', 'import', 'mro', 'exec')
 host = "0.0.0.0"
 port = 6177
@@ -28,6 +29,7 @@ app.flag_path = "FLAG{W4F_1sn7_7h3_pr0bl3m_t0_u?}"
 app.config['flag'] = app.flag_ssti
 
 # ---------------->
+app.PARSER = etree.XMLParser(resolve_entities=True)
 
 
 def connect_to_db() -> tuple:

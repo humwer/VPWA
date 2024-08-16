@@ -9,7 +9,7 @@
         <p class="author">Автор: {{context.post.author}}</p>
       </header>
       <div>
-        <img src="{{context.post.path}}" width="600" height="600">
+          <img src="{{context.post.path}}" width="600" height="600">
       </div>
       <div class="tags">
         {% for tag in context.post.tags %}
@@ -43,7 +43,7 @@
                 <form class="comment" method="post">
                     <textarea class="msg" name="comment"></textarea>
                     <input type="hidden" value="{{context.username}}" name="author"/>
-                    <input type="submit" value="Отправить"/>
+                    <input class="comment-btn" type="submit" value="Отправить"/>
                 </form>
             </div>
         </div>

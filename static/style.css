@@ -93,8 +93,8 @@ body {
 }
 
 .main .filter-search .btn-search:hover {
-    color: #004cff;
-    background-color: #3f3f3f;
+    background-color: #0040d5;
+    cursor: pointer;
 }
 
 .main .content {
@@ -122,6 +122,77 @@ body {
 }
 
 .main .post .title:hover {
+    color: #004cff;
+}
+
+.main .post .create-post {
+    margin: 0;
+}
+
+.main .create-post header {
+    margin-top: 10px;
+    background-color: #333;
+    border: 1px solid #21262a;
+    border-radius: 8px;
+}
+
+.main .create-post form {
+    display: grid;
+    margin-top: 10px;
+    background-color: #333;
+    border: 1px solid #21262a;
+    border-radius: 8px;
+}
+
+.main .create-post .create-form-title {
+    margin-top: 10px;
+    margin-left: 10px;
+    width: 96%;
+    border: 1px solid #21262a;
+    background-color: #222;
+    border-radius: 6px;
+    color: white;
+    height: 26px;
+}
+
+.main .create-post .create-form-tags {
+    margin-top: 10px;
+    margin-left: 10px;
+    width: 96%;
+    border: 1px solid #21262a;
+    background-color: #222;
+    border-radius: 6px;
+    color: white;
+    height: 26px;
+}
+
+.main .create-post .create-form-file {
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+.main .create-post .create-form-submit {
+    border: 1px solid #21262a;
+    background-color: #222;
+    color: white;
+    height: 30px;
+}
+
+.main .create-post .create-form-submit:hover {
+    background-color: #0040d5;
+    cursor: pointer;
+}
+
+.main .create-post .create-title {
+    font-family: Arial;
+    font-size: 22px;
+    text-decoration: none;
+    color: white;
+    text-align: center;
+}
+
+.main .create-post .create-title:hover {
     color: #004cff;
 }
 
@@ -216,6 +287,19 @@ body {
     font-family: Arial;
 }
 
+.comment-blog .comment .comment-btn {
+    margin-bottom: 10px;
+    border: 1px solid #21262a;
+    background-color: #222;
+    color: white;
+    height: 30px;
+}
+
+.comment-blog .comment .comment-btn:hover {
+    background-color: #0040d5;
+    cursor: pointer;
+}
+
 .login {
     box-sizing: border-box;
     margin-top: 3%;
@@ -276,6 +360,7 @@ body {
 
 .login .input button:hover {
     background-color: #0040d5;
+    cursor: pointer;
 }
 
 .login .input input {
@@ -294,6 +379,7 @@ body {
 
 .login .register:hover {
     color: #004cff;
+    cursor: pointer;
 }
 
 .login .form {
