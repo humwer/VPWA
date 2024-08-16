@@ -51,9 +51,53 @@ body {
     float: left;
 }
 
-.main .content {
-    margin-top: 5%;
+.main .filter-search {
+    display: inline-block;
+    vertical-align: middle;
+    margin-left: 400px;
+    margin-top: 20px;
+    margin-bottom: 20px;
     position: relative;
+    color: white;
+    width: 100%;
+}
+
+.main .filter-search .search-form * {
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0;
+}
+
+.main .filter-search form .search {
+    border: 1px solid #21262a;
+    background-color: #333;
+    max-height: 20px;
+    width: 42%;
+    color: white;
+    resize: none;
+}
+
+.main .filter-search .filter {
+    border: 1px solid #21262a;
+    background-color: #333;
+    color: white;
+    height: 26px;
+}
+
+.main .filter-search .btn-search {
+    background-color: #333;
+    color: white;
+    border: 1px solid #21262a;
+    height: 26px;
+    width: 55px;
+}
+
+.main .filter-search .btn-search:hover {
+    color: #004cff;
+    background-color: #3f3f3f;
+}
+
+.main .content {
     min-height: 75px;
     color: white;
     width: 100%;

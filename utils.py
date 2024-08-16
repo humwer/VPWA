@@ -84,7 +84,7 @@ def get_posts() -> list:
     for post in posts:
         data.append({'id': post[0], 'author': post[1], 'title': post[2],
                      'tags': post[3].split(','), 'path': post[4], 'visible': post[5]})
-    return data
+    return sorted(data, key=lambda x: x['id'], reverse=True)
 
 
 def get_post(post_id: str) -> dict:
@@ -125,3 +125,25 @@ def add_comment_to_post(post_id: str, username: str, comment: str) -> bool:
     except Exception as err:
         print(f'[-] Ошибка: {err}')
         return False
+
+
+def search_posts(column, value) -> list:
+    data = []
+
+    try:
+        conn, cursor = connect_to_db()
+        if "'" in value or ";" in value:
+            raise Exception("[?] Крутят скулю в поиске")
+        if ";" in column:
+            raise Exception("[?] Крутят скулю в фильтре и пытаются сделать stacked")
+        query = f"SELECT * FROM posts WHERE {column} like '%{value}%';"
+        posts = cursor.execute(query).fetchall()
+        cursor.close()
+        for post in posts:
+            data.append({'id': post[0], 'author': post[1], 'title': post[2],
+                         'tags': post[3].split(','), 'path': post[4], 'visible': post[5]})
+        return sorted(data, key=lambda x: x['id'], reverse=True)
+
+    except Exception as err:
+        print(f"[?] {err}")
+        return data

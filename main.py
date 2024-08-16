@@ -7,12 +7,7 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'), 'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
 
-@app.errorhandler(404)
-def not_found(error):
-    return redirect('/'), 302
-
-
-@app.errorhandler(500)
+@app.errorhandler(HTTPException)
 def not_found(error):
     return redirect('/'), 302
 
@@ -30,6 +25,24 @@ def index():
                'posts': get_posts()}
     res = make_response(render_template("index.html", context=context))
     return res
+
+
+@app.route("/search", methods=["POST"])
+def search():
+    context_login = False
+    context_admin = False
+    username = validate_session(request.cookies.get('session'))
+    if username:
+        context_login = True
+    if username == 'admin':
+        context_admin = True
+    data = request.form
+    if 'filter' not in data:
+        return redirect("/")
+    posts = search_posts(request.form.get('filter'), request.form.get('search'))
+    context = {"login": context_login, "username": username, "admin": [context_admin, app.flag_auth],
+               'posts': posts}
+    return make_response(render_template("index.html", context=context))
 
 
 @app.route('/posts/<post_id>', methods=["GET", "POST"])

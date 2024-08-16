@@ -2,13 +2,25 @@
 
 {% block content %}
 <div class="main">
+  <div class="filter-search">
+    <form class="search-form" method="post" action="/search">
+      <select class="filter" name="filter">
+        <option value="" selected disabled hidden>Фильтр</option>
+        <option value="title">В названии</option>
+        <option value="tags">По категории</option>
+        <option value="username">По пользователю</option>
+      </select>
+      <textarea class="search" name="search" placeholder="Введите значение..."></textarea>
+      <input type="submit" value="Поиск" class="btn-search"/>
+    </form>
+  </div>
   <div class="main content">
     {% if context.admin.0 %}
     <span class="main post">Мой текущий секрет: <b style="color: #ff0000">{{ context.admin.1 }}</b></span>
     {% endif %}
     {% for post in context.posts %}
     <div class="main post">
-      {% if post.visible %}
+      {% if post.visible != 0 %}
       <header>
         <a class="title" href="/posts/{{post.id}}">{{post.title}}</a>
         <p class="author">Автор: {{ post.author }}</p>

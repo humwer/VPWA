@@ -1,5 +1,6 @@
 from flask import (Flask, render_template_string, render_template, request, make_response, send_from_directory,
                    redirect, url_for)
+from werkzeug.exceptions import HTTPException
 from datetime import datetime
 from lxml import etree
 import sqlite3
@@ -99,9 +100,9 @@ def prepare_db():
                "id"            INTEGER NOT NULL UNIQUE,
                "username"      TEXT(3, 50) NOT NULL,
                "title"         TEXT NOT NULL,
-               "tags"    TEXT(200) NOT NULL,
+               "tags"          TEXT(200) NOT NULL,
                "content_path"  TEXT NOT NULL,
-               "visible"       INTEGER NOT NULL,
+               "visible"       INTEGER DEFAULT 1 NOT NULL,
                PRIMARY KEY("id" AUTOINCREMENT)
        );""",
                f'INSERT INTO "posts" ("id", "username", "title", "tags", "content_path", "visible") '
