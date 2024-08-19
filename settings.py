@@ -16,6 +16,7 @@ app.DB_NAME = 'sqli.db'
 app.UPLOAD_FOLDER = '/static/'
 app.ALLOWED_EXTENSIONS = ('gif', 'jpg', 'jpeg', 'png', 'svg')
 app.ALLOWED_MIMETYPE = ('image/gif', 'image/jpeg', 'image/png', 'image/svg+xml')
+app.EXCLUDE_LFI = [':', '.py', '.ini']
 app.EXCLUDE_FOR_SSTI = ('popen', 'write', 'os', 'import', 'mro', 'exec')
 host = "0.0.0.0"
 port = 6177

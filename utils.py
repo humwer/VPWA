@@ -70,6 +70,21 @@ def validate_registration(login: str, password: str, confirm_password: str) -> t
     return 1, f'Новый пользователь {login} зарегистрирован!'
 
 
+def validate_role(session: str, role: str) -> bool:
+    conn, cursor = connect_to_db()
+    query = f'SELECT id FROM sessions WHERE session="{session}"'
+    result = cursor.execute(query).fetchone()
+    if result:
+        query = f'SELECT role FROM users WHERE session_id={result[0]}'
+        result = cursor.execute(query).fetchone()
+        cursor.close()
+        if result[0] == role:
+            return True
+        return False
+    cursor.close()
+    return False
+
+
 def validate_session(session: str) -> str:
     conn, cursor = connect_to_db()
     query = f'SELECT id FROM sessions WHERE session="{session}"'
@@ -174,6 +189,22 @@ def upload_file(file, info_post: dict) -> bool:
         cursor.close()
         return False
     return True
+
+
+def read_file(filename: str = 'ru'):
+    path_to_read = os.path.normpath(app.root_path) + os.path.normpath(app.UPLOAD_FOLDER)
+    filename = filename.replace('../', '')
+    path_to_file = os.path.join(path_to_read, filename)
+    for exclude in app.EXCLUDE_LFI:
+        if exclude in filename:
+            return ''
+    try:
+        file = open(path_to_file, 'r', encoding='utf-8')
+        data = ''.join(file.readlines())
+        return data
+    except Exception as err:
+        return ''
+
 
 
 def search_posts(column, value) -> list:

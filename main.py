@@ -27,6 +27,18 @@ def index():
     return res
 
 
+@app.route("/instruction", methods=["GET"])
+def instruction():
+    context_login = False
+    username = validate_session(request.cookies.get('session'))
+    context_support = validate_role(request.cookies.get('session'), 'support')
+    if username:
+        context_login = True
+    content = read_file(request.values.get('lang'))
+    context = {"login": context_login, "username": username, "support": context_support, "content": content}
+    return make_response(render_template("instruction.html", context=context))
+
+
 @app.route("/search", methods=["POST"])
 def search():
     context_login = False

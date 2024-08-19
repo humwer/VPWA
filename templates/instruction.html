@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main">
+  <div class="main content">
+    <form class="main create-post">
+      <header>
+        <p class="create-title">Инструкция для модераторов</p>
+      </header>
+      {% if context.support %}
+      <select onchange="javascript: window.location.href = '/instruction?lang='+this.value">
+        <option value="" selected disabled hidden>Выберите язык</option>
+        <option value="ru">ru</option>
+        <option value="en">en</option>
+      </select>
+      <div class="blog">
+          {% autoescape false %}
+            <p>
+            {{ context.content }}
+            </p>
+          {% endautoescape %}
+      </div>
+      {% else %}
+      <header>
+          <a class="create-title" href="/login"><p>Инструкция доступна только пользователю <b>support</b>!</p></a>
+      </header>
+      {% endif %}
+  </div>
+</div>
+{% endblock %}
