@@ -17,18 +17,19 @@ app.DB_NAME = 'sqli.db'
 app.UPLOAD_FOLDER = '/static/'
 app.ALLOWED_EXTENSIONS = ('gif', 'jpg', 'jpeg', 'png', 'svg')
 app.ALLOWED_MIMETYPE = ('image/gif', 'image/jpeg', 'image/png', 'image/svg+xml')
-app.EXCLUDE_LFI = [':', '.py', '.ini']
+app.EXCLUDE_LFI = [':', '.py', '.ini', '1bf549a3128aaf9f20293d2566651703']
 app.EXCLUDE_FOR_SSTI = ('popen', 'write', 'os', 'import', 'mro', 'exec')
 host = "0.0.0.0"
 port = 6177
 # ----------------<
-app.flag_auth = "FLAG{N3w_func710n_4_r3g1$7r4710n!}"
-app.flag_brute = "FLAG{W34k_p@$$w0rd_1$_7r0bl3!}"
-app.flag_sqli = "FLAG{D0_u_l1k3_$QL_1nj3c710n$?}"
-app.flag_xss = "FLAG{0op$_c00k13_w17h0u7_h77p_0n1y?}"
-app.flag_ssti = "FLAG{My_f4v0ur173_73mp1473$_1nj3c710n}"
-app.flag_xxe = "FLAG{1_7h0ugh7_w0u1d_b3_7h3_p1c7ur3}"
-app.flag_path = "FLAG{W4F_1$n7_7h3_pr0bl3m_70_u?}"
+app.flag_auth = "FLAG{N3w_func710n_4_r3g1$7r4710n!}"        # +
+app.flag_brute = "FLAG{W34k_p@$$w0rd_1$_7r0bl3!}"           # +
+app.flag_sqli = "FLAG{D0_u_l1k3_$QL_1nj3c710n$?}"           # +
+app.flag_xss = "FLAG{0op$_c00k13_w17h0u7_h77p_0n1y?}"       # - need bot
+app.flag_ssti = "FLAG{My_f4v0ur173_73mp1473$_1nj3c710n}"    # +
+app.flag_xxe = "FLAG{1_7h0ugh7_w0u1d_b3_7h3_p1c7ur3}"       # +
+app.flag_path = "FLAG{W4F_1$n7_7h3_pr0bl3m_70_u?}"          # +
+app.flag_ssrf = "FLAG{1n73rn4l_$3rv3r_1$n7_1n73rn4l?}"      # - need pcap and internal api
 app.config['flag'] = app.flag_ssti
 
 # ---------------->
@@ -151,6 +152,18 @@ def prepare_comments_db():
     print('[+] Comments to database sqli.db were add!')
 
 
+def prepare_files_with_flags():
+    path_to_file = '/tmp/a6cbab90ebc8b8fa1b3052e56d88a5e5'
+    file = open(path_to_file, 'w')
+    file.write(app.flag_path)
+    file.close()
+    path_to_file = '/tmp/1bf549a3128aaf9f20293d2566651703'
+    file = open(path_to_file, 'w')
+    file.write(app.flag_xxe)
+    file.close()
+
+
 def prepare():
     prepare_db()
     prepare_comments_db()
+    #prepare_files_with_flags()

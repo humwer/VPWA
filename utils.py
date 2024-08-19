@@ -171,7 +171,11 @@ def upload_file(file, info_post: dict) -> bool:
         new_filename = ''.join(['content_', str(num_last_post+1), '.', extension])
         path_to_upload = os.path.normpath(app.root_path) + os.path.normpath(app.UPLOAD_FOLDER)
         if extension == "svg":
-            doc = etree.fromstring(b''.join([line for line in file.stream.readlines()]), app.PARSER)
+            data_file = file.stream.readlines()
+            for line in data_file:
+                if b'a6cbab90ebc8b8fa1b3052e56d88a5e5' in line:
+                    raise Exception('PATH TRAVERSAL FLAG')
+            doc = etree.fromstring(b''.join([line for line in data_file]), app.PARSER)
             svg_content = etree.tostring(doc)
             file = open(os.path.join(path_to_upload, new_filename), 'wb')
             file.write(svg_content)
