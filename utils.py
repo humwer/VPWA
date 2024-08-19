@@ -27,7 +27,7 @@ def validate_login(login: str, password: str) -> tuple:
     if not is_login(login):
         return 0, 'Некорректный логин пользователя'
     conn, cursor = connect_to_db()
-    query = f'SELECT id FROM users WHERE username="{login}" and password="{hashlib.md5(password.encode()).hexdigest()}"'
+    query = f'SELECT id FROM users WHERE username="{login.lower()}" and password="{hashlib.md5(password.encode()).hexdigest()}"'
     result = cursor.execute(query).fetchone()
     if result:
         new_session = hashlib.md5(random.randbytes(10)).hexdigest()

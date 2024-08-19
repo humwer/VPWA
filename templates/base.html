@@ -17,7 +17,9 @@
             </div>
             <div class="navbar button">
                 <a href="/">Главная</a>
-                <a href="#2">Пользователи</a>
+                {% if context.admin.0 %}
+                <a href="/status">Статус</a>
+                {% endif %}
                 <a href="/instruction?lang=ru">Инструкция</a>
                 <a href="/create">Загрузить</a>
                 {% if context.login %}

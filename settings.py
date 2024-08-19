@@ -3,6 +3,7 @@ from flask import (Flask, render_template_string, render_template, request, make
 from werkzeug.exceptions import HTTPException
 from datetime import datetime
 from lxml import etree
+import requests
 import sqlite3
 import hashlib
 import base64
@@ -21,12 +22,13 @@ app.EXCLUDE_FOR_SSTI = ('popen', 'write', 'os', 'import', 'mro', 'exec')
 host = "0.0.0.0"
 port = 6177
 # ----------------<
-app.flag_auth = "FLAG{N3w_funct10n_4_r3g1s7r4710n!}"
-app.flag_sqli = "FLAG{D0_u_l1k3_SQL_1nj3ct10ns?}"
-app.flag_xss = "FLAG{0ops_c00k13_w17h0u7_h77p_0n1y?}"
-app.flag_ssti = "FLAG{My_f4v0ur173_73mp1473s_1nj3c710n}"
+app.flag_auth = "FLAG{N3w_func710n_4_r3g1$7r4710n!}"
+app.flag_brute = "FLAG{W34k_p@$$w0rd_1$_7r0bl3!}"
+app.flag_sqli = "FLAG{D0_u_l1k3_$QL_1nj3c710n$?}"
+app.flag_xss = "FLAG{0op$_c00k13_w17h0u7_h77p_0n1y?}"
+app.flag_ssti = "FLAG{My_f4v0ur173_73mp1473$_1nj3c710n}"
 app.flag_xxe = "FLAG{1_7h0ugh7_w0u1d_b3_7h3_p1c7ur3}"
-app.flag_path = "FLAG{W4F_1sn7_7h3_pr0bl3m_t0_u?}"
+app.flag_path = "FLAG{W4F_1$n7_7h3_pr0bl3m_70_u?}"
 app.config['flag'] = app.flag_ssti
 
 # ---------------->
@@ -136,11 +138,11 @@ def prepare_comments_db():
         f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
         f'VALUES (4, 2, "admin", "<b>Support</b>, напомни, я тебе же говорил где лежат ключи для апи? ^.^");',
         f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
-        f'VALUES (5, 2, "Support", "Ага, ты сказал сюда смотреть /tmp/api_keys/api.txt<br>А что? >_> ");',
+        f'VALUES (5, 2, "Support", "Ага, ты сказал сюда смотреть /tmp/1bf549a3128aaf9f20293d2566651703<br>Слушай, а ты обезопасил форму загрузки постов? >_> ");',
         f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
-        f'VALUES (6, 2, "admin", "Да так... Слушай, видел я тебе отдельную вкладку для инструкции запилил? :)");',
+        f'VALUES (6, 2, "admin", "А? Да не всё должно быть пучком, не переживай :) :)");',
         f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
-        f'VALUES (7, 2, "Support", "Не-а, но сейчас гляну. Кстати, а ничего что мы здесь детали обсуждаем? ._.");',
+        f'VALUES (7, 2, "Support", "Ага, верю. Кстати, а ничего что мы здесь детали обсуждаем? ._.");',
         f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
         f'VALUES (8, 2, "admin", "Да не парься, я просто скрою этот пост и всё будет ок :)");',
     ]

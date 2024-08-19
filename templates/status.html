@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="main">
+  <div class="main content">
+    <form class="main create-post">
+      {% if context.admin.0 %}
+      <input type="button" value="Проверка статуса" onclick="javascript: fetch('/status?server=localhost', {method: 'POST'}).then(response => response.text()).then(data => document.querySelector('#content').innerHTML=data)" />
+      <div class="blog">
+        <p>Текущий статус:</p>
+        <p id="content">
+        </p>
+      </div>
+      {% else %}
+      <header>
+          <a class="create-title" href="/login"><p>Данная страница доступна только <b>admin</b>!</p></a>
+      </header>
+      {% endif %}
+  </div>
+</div>
+{% endblock %}

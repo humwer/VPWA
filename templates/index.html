@@ -18,6 +18,9 @@
     {% if context.admin.0 %}
     <span class="main post" style="text-align: center"><b>{{ context.admin.1 }}</b></span>
     {% endif %}
+    {% if context.support.0 %}
+    <span class="main post" style="text-align: center"><b>{{ context.support.1 }}</b></span>
+    {% endif %}
     {% for post in context.posts %}
     <div class="main post">
       {% if post.visible != 0 %}

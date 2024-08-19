@@ -15,14 +15,13 @@ def not_found(error):
 @app.route("/")
 def index():
     context_login = False
-    context_admin = False
     username = validate_session(request.cookies.get('session'))
     if username:
         context_login = True
-    if username == 'admin':
-        context_admin = True
+    context_admin = validate_role(request.cookies.get('session'), 'admin')
+    context_support = validate_role(request.cookies.get('session'), 'support')
     context = {"login": context_login, "username": username, "admin": [context_admin, app.flag_auth],
-               'posts': get_posts()}
+               'posts': get_posts(), "support": [context_support, app.flag_brute]}
     res = make_response(render_template("index.html", context=context))
     return res
 
@@ -31,23 +30,49 @@ def index():
 def instruction():
     context_login = False
     username = validate_session(request.cookies.get('session'))
-    context_support = validate_role(request.cookies.get('session'), 'support')
     if username:
         context_login = True
+    context_support = validate_role(request.cookies.get('session'), 'support')
     content = read_file(request.values.get('lang'))
     context = {"login": context_login, "username": username, "support": context_support, "content": content}
+    context_admin = validate_role(request.cookies.get('session'), 'admin')
+    context["admin"] = [context_admin, app.flag_auth]
     return make_response(render_template("instruction.html", context=context))
+
+
+@app.route("/status", methods=["GET", "POST"])
+def status():
+    context_login = False
+    username = validate_session(request.cookies.get('session'))
+    context_admin = validate_role(request.cookies.get('session'), 'admin')
+    if username:
+        context_login = True
+    context = {"login": context_login, "username": username, "admin": [context_admin, app.flag_auth]}
+    if request.method == "GET":
+        return make_response(render_template("status.html", context=context))
+    else:
+        if context_admin:
+            try:
+                result = requests.get(f'http://{request.values.get('server')}:6177/some_api_for_checker_status')
+                return result.text
+            except Exception as err:
+                return ''
+        else:
+            return redirect('/'), 403
+
+
+@app.route("/some_api_for_checker_status", methods=["GET"])
+def ok():
+    return 'OK'
 
 
 @app.route("/search", methods=["POST"])
 def search():
     context_login = False
-    context_admin = False
     username = validate_session(request.cookies.get('session'))
     if username:
         context_login = True
-    if username == 'admin':
-        context_admin = True
+    context_admin = validate_role(request.cookies.get('session'), 'admin')
     data = request.form
     if 'filter' not in data:
         return redirect("/")
@@ -65,6 +90,8 @@ def post(post_id):
     if username:
         context_login = True
         context["username"] = username
+    context_admin = validate_role(request.cookies.get('session'), 'admin')
+    context["admin"] = [context_admin, app.flag_auth]
     context["login"] = context_login
     context["post_id"] = post_id
     comments = get_comments_from_post(post_id)
@@ -87,7 +114,8 @@ def new_post():
     username = validate_session(request.cookies.get('session'))
     if username:
         context_login = True
-    context = {"login": context_login, "username": username}
+    context_admin = validate_role(request.cookies.get('session'), 'admin')
+    context = {"login": context_login, "username": username, "admin": [context_admin, app.flag_auth]}
     if request.method == "GET":
         return make_response(render_template("add_post.html", context=context))
     else:
@@ -103,6 +131,8 @@ def new_post():
 def login():
     msg = ''
     context = {}
+    context_admin = validate_role(request.cookies.get('session'), 'admin')
+    context["admin"] = [context_admin, app.flag_auth]
     if request.method == "GET":
         if validate_session(request.cookies.get('session')):
             return make_response(redirect('/'))
@@ -133,6 +163,8 @@ def logout():
 @app.route("/register", methods=['GET', 'POST'])
 def register():
     context = {'msg': None}
+    context_admin = validate_role(request.cookies.get('session'), 'admin')
+    context["admin"] = [context_admin, app.flag_auth]
     if request.method == "GET":
         if validate_session(request.cookies.get('session')):
             return redirect('/')
