@@ -2,4 +2,3 @@ Flask
 lxml
 requests
 aiohttp
-selenium
