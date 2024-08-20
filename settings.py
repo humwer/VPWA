@@ -166,4 +166,4 @@ def prepare_files_with_flags():
 def prepare():
     prepare_db()
     prepare_comments_db()
-    #prepare_files_with_flags()
+    prepare_files_with_flags()

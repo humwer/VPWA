@@ -198,6 +198,7 @@ def upload_file(file, info_post: dict) -> bool:
 def read_file(filename: str = 'ru'):
     path_to_read = os.path.normpath(app.root_path) + os.path.normpath(app.UPLOAD_FOLDER)
     filename = filename.replace('../', '')
+    filename = filename.replace('/', '')
     path_to_file = os.path.join(path_to_read, filename)
     for exclude in app.EXCLUDE_LFI:
         if exclude in filename:
@@ -208,7 +209,6 @@ def read_file(filename: str = 'ru'):
         return data
     except Exception as err:
         return ''
-
 
 
 def search_posts(column, value) -> list:
