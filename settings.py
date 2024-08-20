@@ -134,18 +134,18 @@ def prepare_comments_db():
         f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
         f'VALUES (2, 1, "C00lB0y", "Круто, прикрутили комментарии!");',
         f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
-        f'VALUES (3, 1, "Franky", "<b>С00lB0y</b>, только спамь комментариями");',
+        f'VALUES (3, 1, "Franky", "<b>С00lB0y</b>, давай без спама ток");',
 
         f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
-        f'VALUES (4, 2, "admin", "<b>Support</b>, напомни, я тебе же говорил где лежат ключи для апи? ^.^");',
+        f'VALUES (4, 2, "admin", "<b>support</b>, ты посмотрел тот файлик? ^.^");',
         f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
-        f'VALUES (5, 2, "Support", "Ага, ты сказал сюда смотреть /tmp/1bf549a3128aaf9f20293d2566651703<br>Слушай, а ты обезопасил форму загрузки постов? >_> ");',
+        f'VALUES (5, 2, "support", "Ты про этот /tmp/1bf549a3128aaf9f20293d2566651703? Ага...<br>Слушай, а ты обезопасил форму загрузки постов? >_> ");',
         f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
-        f'VALUES (6, 2, "admin", "А? Да не всё должно быть пучком, не переживай :) :)");',
+        f'VALUES (6, 2, "admin", "А? Да не, всё должно быть пучком, не переживай :) :)");',
         f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
-        f'VALUES (7, 2, "Support", "Ага, верю. Кстати, а ничего что мы здесь детали обсуждаем? ._.");',
+        f'VALUES (7, 2, "support", "Ага, верю. Кстати, а ничего что мы здесь детали обсуждаем? ._.");',
         f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
-        f'VALUES (8, 2, "admin", "Да не парься, я просто скрою этот пост и всё будет ок :)");',
+        f'VALUES (8, 2, "admin", "Не парься, я просто скрою этот пост и всё будет ок :)");',
     ]
     data = multiple_queries_to_db(queries, cursor, conn)
     cursor.close()
