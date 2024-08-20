@@ -66,6 +66,11 @@ def ok():
     return 'OK'
 
 
+@app.route("/robots.txt", methods=["GET"])
+def robots():
+    return send_from_directory(app.root_path, "robots.txt", mimetype='text/plain')
+
+
 @app.route("/search", methods=["POST"])
 def search():
     context_login = False
