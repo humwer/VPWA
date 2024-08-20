@@ -43,5 +43,4 @@ async def index(req: web.BaseRequest):
 app = web.Application()
 app.add_routes([web.get('/', index)])
 
-if __name__ == '__main__':
-    web.run_app(app, host="localhost", port=9090)
+web.run_app(app, host="localhost", port=9090)
