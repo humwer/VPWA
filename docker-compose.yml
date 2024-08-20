@@ -1,0 +1,10 @@
+services:
+    service:
+        build: .
+        ports:
+            - '3000:6177'
+        stdin_open: true
+        tty: true
+        pids_limit: 100
+        mem_limit: 512M
+        cpus: 0.25
