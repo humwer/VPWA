@@ -78,12 +78,13 @@ def search():
     if username:
         context_login = True
     context_admin = validate_role(request.cookies.get('session'), 'admin')
+    context_support = validate_role(request.cookies.get('session'), 'support')
     data = request.form
     if 'filter' not in data:
         return redirect("/")
     posts = search_posts(request.form.get('filter'), request.form.get('search'))
     context = {"login": context_login, "username": username, "admin": [context_admin, app.flag_auth],
-               'posts': posts}
+               'posts': posts, "support": context_support}
     return make_response(render_template("index.html", context=context))
 
 
