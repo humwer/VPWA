@@ -198,7 +198,8 @@ def upload_file(file, info_post: dict) -> bool:
 def read_file(filename: str = 'ru'):
     path_to_read = os.path.normpath(app.root_path) + os.path.normpath(app.UPLOAD_FOLDER)
     filename = filename.replace('../', '')
-    filename = filename.replace('/', '')
+    if filename.startswith('/'):
+        return ''
     path_to_file = os.path.join(path_to_read, filename)
     for exclude in app.EXCLUDE_LFI:
         if exclude in filename:
