@@ -2,9 +2,9 @@ var page = require('webpage').create();
 var system = require('system');
 var host = system.args[1];
 var port = system.args[2];
-var url = "https://"+host+":"+port+"/posts/1";
+var url = "http://"+host+":6177/posts/1";
 var timeout = 5000;
-var seconds = 5;
+var seconds = 3000;
 
 phantom.addCookie({
     'name': 'session',
