@@ -10,10 +10,14 @@ services:
         pids_limit: 100
         mem_limit: 512M
         cpus: 0.25
-    bot_xss_3000:
+    bot_xss_4000:
         build:
             context: .
             dockerfile: DockerfileBot
+        environment:
+            name_service: "vpwa_main_3000"
+        ports:
+            - '4000:6177'
         stdin_open: true
         tty: true
         pids_limit: 100
