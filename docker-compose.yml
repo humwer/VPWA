@@ -1,10 +1,21 @@
 services:
-    service:
-        build: .
+    vpwa_main_3000:
+        build:
+            context: .
+            dockerfile: DockerfileVPWA
         ports:
             - '3000:6177'
         stdin_open: true
         tty: true
         pids_limit: 100
         mem_limit: 512M
+        cpus: 0.25
+    bot_xss_3000:
+        build:
+            context: .
+            dockerfile: DockerfileBot
+        stdin_open: true
+        tty: true
+        pids_limit: 100
+        mem_limit: 128M
         cpus: 0.25

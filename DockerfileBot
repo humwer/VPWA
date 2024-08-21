@@ -1,0 +1,6 @@
+FROM wernight/phantomjs
+COPY xss-bot.js /bot/
+COPY run_bot.sh /bot/
+WORKDIR /bot
+RUN chmod +x ./run_bot.sh
+CMD ["sh", "-c", "./run_bot.sh"]

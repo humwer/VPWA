@@ -1,5 +1,5 @@
 var page = require('webpage').create();
-var host = "127.0.0.1";
+var host = "vpwa_main_3000";
 var url = "https://"+host+":6177/posts/";
 var timeout = 2000;
 phantom.addCookie({
