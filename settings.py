@@ -25,11 +25,11 @@ port = 6177
 app.flag_auth = "FLAG{N3w_func710n_4_r3g1$7r4710n!}"        # +
 app.flag_brute = "FLAG{W34k_p@$$w0rd_1$_7r0bl3!}"           # +
 app.flag_sqli = "FLAG{D0_u_l1k3_$QL_1nj3c710n$?}"           # +
-app.flag_xss = "FLAG{0op$_c00k13_w17h0u7_h77p_0n1y?}"       # - need bot
+app.flag_xss = "FLAG{0op$_c00k13_w17h0u7_h77p_0n1y?}"       # +
 app.flag_ssti = "FLAG{My_f4v0ur173_73mp1473$_1nj3c710n}"    # +
 app.flag_xxe = "FLAG{1_7h0ugh7_w0u1d_b3_7h3_p1c7ur3}"       # +
 app.flag_path = "FLAG{W4F_1$n7_7h3_pr0bl3m_70_u?}"          # +
-app.flag_ssrf = "FLAG{1n73rn4l_$3rv3r_1$n7_1n73rn4l?}"      # - need pcap and internal api
+app.flag_ssrf = "FLAG{1n73rn4l_$3rv3r_1$n7_1n73rn4l?}"      # +
 app.config['flag'] = app.flag_ssti
 
 # ---------------->
