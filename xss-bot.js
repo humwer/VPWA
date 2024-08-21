@@ -1,7 +1,8 @@
 var page = require('webpage').create();
 var system = require('system');
 var host = system.args[1];
-var url = "https://"+host+":6177/posts/";
+var port = system.args[2];
+var url = "https://"+host+":"+port+"/posts/1";
 var timeout = 5000;
 var seconds = 5;
 
@@ -25,28 +26,7 @@ page.onResourceTimeout = function(e) {
     }, seconds);
 };
 
-page.open(url+1, function(status) {
-    console.log("[INFO] rendered page");
-    setTimeout(function(){
-        phantom.exit();
-    }, seconds);
-});
-
-page.open(url+2, function(status) {
-    console.log("[INFO] rendered page");
-    setTimeout(function(){
-        phantom.exit();
-    }, seconds);
-});
-
-page.open(url+3, function(status) {
-    console.log("[INFO] rendered page");
-    setTimeout(function(){
-        phantom.exit();
-    }, seconds);
-});
-
-page.open(url+4, function(status) {
+page.open(url, function(status) {
     console.log("[INFO] rendered page");
     setTimeout(function(){
         phantom.exit();

@@ -1,4 +1,5 @@
 FROM wernight/phantomjs
+USER root
 COPY xss-bot.js /bot/
 COPY run_bot.sh /bot/
 WORKDIR /bot
