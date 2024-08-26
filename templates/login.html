@@ -2,21 +2,21 @@
 
 {% block content %}
 <div class="login">
-  <div class="login post">
-    <form class="login form" method="post">
-      <p class="login title">Войти</p>
+  <div class="post">
+    <form class="form" method="post">
+      <p class="title">Войти</p>
       {% if 'Новый' in context.msg %}
-        <p class="login msg success">{{ context.msg }}</p>
+        <p class="msg success">{{ context.msg }}</p>
         {% else %}
-        <p class="login msg failure">{{ context.msg }}</p>
+        <p class="msg failure">{{ context.msg }}</p>
       {% endif %}
-      <div class="login input">
+      <div class="input">
         <input type="text" placeholder="Логин" name="login" required>
         <input type="password" placeholder="Пароль" name="password" required>
 
         <button type="submit"><span>Войти</span></button>
       </div>
-      <a href="/register" class="login register">Нет аккаунта? Зарегистрируйтесь!</a>
+      <a href="/register" class="register">Нет аккаунта? Зарегистрируйтесь!</a>
     </form>
   </div>
 </div>

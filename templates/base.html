@@ -12,10 +12,10 @@
 
     <body>
         <div class="navbar">
-            <div class="navbar logo">
+            <div class="logo">
                 <a href="/"><img src="{{ url_for('static', filename='VPWA.png') }}" alt="VAFE" width="180" height="45"></a>
             </div>
-            <div class="navbar button">
+            <div class="button">
                 <a href="/">Главная</a>
                 {% if context.admin.0 %}
                 <a href="/status">Статус</a>
@@ -28,7 +28,7 @@
                 <a href="/login">Войти</a>
                 {% endif %}
             </div>
-            <div class="navbar info">
+            <div class="info">
                 {% if context.username %}
                 <a href="/profile/#">Вы вошли под пользователем <b style="color: #afafaf;">{{context.username}}</b></a>
                 {% else %}

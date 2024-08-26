@@ -28,9 +28,7 @@
         <a class="title" href="/posts/{{post.id}}">{{post.title}}</a>
         <p class="author">Автор: {{ post.author }}</p>
       </header>
-      <div>
-        <img src="{{ post.path }}" width="600" height="600">
-      </div>
+      <img src="{{ post.path }}" width="600" height="600">
       <div class="tags">
         {% for tag in post.tags %}
         <span class="tag">{{tag}}</span>

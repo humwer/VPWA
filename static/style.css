@@ -8,6 +8,7 @@ body {
   background-color: #333;
   font-family: Arial;
   display: flex;
+  margin-bottom: 20px;
 }
 
 /* Links inside the navbar */
@@ -31,13 +32,13 @@ body {
 }
 
 .navbar .logo {
-    margin-left: 400px;
-    min-width: 10%;
+    /* margin-left: 400px; */
+    /* min-width: 10%; */
 }
 
 .navbar .button {
     margin-left: 10px;
-    min-width: 50%;
+    /* min-width: 50%; */
 }
 
 .navbar .button a:hover {
@@ -46,20 +47,25 @@ body {
 
 .main {
     box-sizing: border-box;
-    margin-left: 200px;
+    /* margin-left: 200px;
     width: 60%;
-    float: left;
+    float: left; */
+    display: flex;
+    flex-direction: column;
+    /* text-align: center; */
+    align-items: center;
 }
 
 .main .filter-search {
-    display: inline-block;
+    /* display: inline-block;
     vertical-align: middle;
-    margin-left: 400px;
-    margin-top: 20px;
+    margin-left: 400px; */
+    /* margin-top: 20px; */
     margin-bottom: 20px;
-    position: relative;
+    /* position: relative; */
     color: white;
     width: 100%;
+    text-align: center;
 }
 
 .main .filter-search .search-form * {
@@ -108,6 +114,7 @@ body {
     border: 1px solid #21262a;
     border-radius: 8px;
     margin-bottom: 2%;
+    padding: 10px 20px;
 }
 
 .main .post header {
@@ -121,9 +128,9 @@ body {
     color: white;
 }
 
-.main .post .title:hover {
+/* .main .post .title:hover {
     color: #004cff;
-}
+} */
 
 .main .post .create-post {
     margin: 0;
@@ -134,6 +141,8 @@ body {
     background-color: #333;
     border: 1px solid #21262a;
     border-radius: 8px;
+    width: 100%;
+    padding: 0 15px;
 }
 
 .main .create-post form {
@@ -142,6 +151,9 @@ body {
     background-color: #333;
     border: 1px solid #21262a;
     border-radius: 8px;
+    align-items: center;
+    justify-items: stretch;
+    padding: 15px 20px;
 }
 
 .main .create-post .blog {
@@ -168,41 +180,52 @@ body {
     color: white;
 }
 
-.main .create-post input:hover {
+.status {
+    min-height: 75px;
+    color: white;
+    box-sizing: border-box;
+    text-align: center;
+    width: 300px;
+}
+
+.main .create-post input[button]:hover {
     background-color: #0040d5;
     cursor: pointer;
 }
 
 .main .create-post .blog p {
     margin-left: 10px;
-     font-family: Arial;
+    font-family: Arial;
+    padding: 0 10px;
 }
 
 .main .create-post .create-form-title {
     margin-top: 10px;
-    margin-left: 10px;
-    width: 96%;
+    /* margin-left: 10px;
+    width: 96%; */
     border: 1px solid #21262a;
     background-color: #222;
     border-radius: 6px;
     color: white;
     height: 26px;
+    padding: 0 10px;
 }
 
 .main .create-post .create-form-tags {
     margin-top: 10px;
-    margin-left: 10px;
-    width: 96%;
+    /* margin-left: 10px;
+    width: 96%; */
     border: 1px solid #21262a;
     background-color: #222;
     border-radius: 6px;
     color: white;
     height: 26px;
+    padding: 0 10px;
 }
 
 .main .create-post .create-form-file {
     margin-top: 10px;
-    margin-left: 10px;
+    /* margin-left: 10px; */
     margin-bottom: 10px;
 }
 
@@ -227,7 +250,7 @@ body {
 }
 
 .main .create-post .create-title:hover {
-    color: #004cff;
+    /* color: #004cff; */
 }
 
 .main .post .author {
@@ -259,12 +282,12 @@ body {
 
 .main .post img {
     margin: 0;
-    margin-left: 5%;
+    /* margin-left: 5%; */
     margin-bottom: 1%;
 }
 
 .comment-blog {
-    margin-left: 20px;
+    /* margin-left: 20px; */
 }
 
 .comment-blog .info {
@@ -303,6 +326,13 @@ body {
     vertical-align: middle;
 }
 
+.comment {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+}
+
 .comment-blog .comment input {
     margin: 0;
     background-color: white;
@@ -316,9 +346,9 @@ body {
 
 .comment-blog .comment .msg {
     padding: 10px;
-    padding-right: 5px;
+    /* padding-right: 5px; */
     font-size: 14px;
-    font-family: Arial;
+    /* font-family: Arial; */
 }
 
 .comment-blog .comment .comment-btn {
@@ -337,18 +367,23 @@ body {
 .login {
     box-sizing: border-box;
     margin-top: 3%;
-    margin-left: 20%;
+    /* margin-top: 20%; */
     margin-bottom: 5%;
-    width: 60%;
-    float: left;
+    width: 100%;
+    /* float: left; */
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .login .post {
-    margin: 0;
-    margin-left: 20%;
+    margin: 0; 
+    /* margin-left: 20%; */
     background-color: #333;
     border: 1px solid #21262a;
     border-radius: 8px;
+    width: 60%;
 }
 
 .login .title {
@@ -377,7 +412,11 @@ body {
 }
 
 .login .input {
-    display: grid;
+    /* display: grid; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    /* /* width: 70%; */
 }
 
 .login .input * {
@@ -390,6 +429,7 @@ body {
     line-height: 30px;
     border: 0;
     border-radius: 8px;
+    width: 70%;
 }
 
 .login .input button:hover {
@@ -404,6 +444,7 @@ body {
     border: 0;
     border-radius: 6px;
     min-height: 30px;
+    width: 70%;
 }
 
 .login .register {
@@ -418,4 +459,5 @@ body {
 
 .login .form {
     color: #e0e3ea;
+    padding-bottom: 20px;
 }
