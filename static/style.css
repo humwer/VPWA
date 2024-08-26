@@ -269,12 +269,13 @@ body {
     font-family: Arial;
     font-size: 14px;
     text-decoration: none;
+    display:flex;
 }
 
 .main .post .tags .tag {
     color: #afafaf;
     margin: 0;
-    margin-left: 1%;
+    margin-left: 5px;
 }
 .main .post .tags .tag:hover {
     color: white;
