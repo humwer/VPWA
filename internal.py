@@ -26,16 +26,12 @@ async def index(req: web.BaseRequest):
         msg['msg'] = 'Need the master token for this operation!'
         return web.json_response(msg)
     if 'keycontent' in list(parameters.keys()):
-        if 'key' not in parameters:
-            msg['msg'] = "Missing key for keycontent!"
-            return web.json_response(msg)
-        else:
-            if parameters.get('key') not in API_KEYS:
-                msg['msg'] = "Bad key!"
-                return web.json_response(msg)
-            else:
-                msg['content'] = API_KEYS_VALUES[parameters.get('key')]
-                return web.json_response(msg)
+	if parameters.get('keycontent') not in API_KEYS:
+	    msg['msg'] = "Bad key!"
+	    return web.json_response(msg)
+	else:
+	    msg['content'] = API_KEYS_VALUES[parameters.get('keycontent')]
+	    return web.json_response(msg)
     msg['msg'] = "Missing parameters!"
     return web.json_response(msg)
 
