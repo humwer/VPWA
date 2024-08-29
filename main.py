@@ -56,7 +56,7 @@ def status():
                 result = requests.get(f'http://{request.values.get('server')}:6177/some_api_for_checker_status')
                 return result.text
             except Exception as err:
-                return "Exception: requests.get(f'http://{request.values.get('server')}:6177/some_api_for_checker_status')"
+                return str(err)
         else:
             return redirect('/'), 403
 
