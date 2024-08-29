@@ -5,7 +5,7 @@
   <div class="status">
     <form class="create-post">
       {% if context.admin.0 %}
-      <input type="button" value="Проверка статуса" onclick="javascript: fetch('/status?server=localhost', {method: 'POST'}).then(response => response.text()).then(data => document.querySelector('#content').innerHTML=data)" />
+      <input type="button" style="cursor:pointer;" value="Проверка статуса" onclick="javascript: fetch('/status?server=localhost', {method: 'POST'}).then(response => response.text()).then(data => document.querySelector('#content').innerHTML=data)" />
       <div class="blog">
         <p>Текущий статус:</p>
         <p id="content">
