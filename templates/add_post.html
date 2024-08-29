@@ -11,7 +11,7 @@
       <form method="post" enctype="multipart/form-data">
         <input class="create-form-title" type="text" placeholder="Заголовок" name="title"/>
         <input class="create-form-tags" type="text" placeholder="Теги" name="tags"/>
-        <input class="create-form-file" type="file" name="file" accept=".svg, .png, .jpg, .jpeg, .gif"/>
+        <input class="create-form-file" type="file" required name="file" accept=".svg, .png, .jpg, .jpeg, .gif"/>
         <input class="create-form-submit" type="submit"/>
       </form>
       {% else %}
