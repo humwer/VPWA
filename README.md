@@ -5,7 +5,9 @@
 
 В экзамене присутствуют следующие уязвимости:
 
-
+<details>
+<summary>Список уязвимостей:</summary>
+  
 >1. **Re-registration users**
 >2. **Bruteforce**
 >3. **XXE**
@@ -14,6 +16,8 @@
 >6. **XSS & Cookie without HttpOnly**
 >7. **Path Traversal**
 >8. **SSRF**
+
+</details>
 
 И несколько не упомянутых :)
 
