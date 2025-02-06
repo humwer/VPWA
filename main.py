@@ -144,7 +144,11 @@ def login():
         is_ok, new_session = validate_login(request.form.get('login'), request.form.get('password'))
         if is_ok:
             res = make_response(redirect('/'))
-            res.set_cookie("session", new_session)
+            res.set_cookie("session", new_session, httponly=True, samesite="Strict")
+            payload = jwt.decode(new_session, app.secret_key, algorithms="HS256")
+            res.set_cookie("refresh_token", payload['refresh_token'], httponly=False, samesite="Strict")
+            res.set_cookie("expired", str(payload['expired']), httponly=False, samesite="Strict")
+            res.set_cookie("user_id", str(payload['user_id']), httponly=False, samesite="Strict")
             return res
         else:
             msg = 'Неверный логин/пароль'
@@ -156,6 +160,28 @@ def login():
 def logout():
     if validate_session(request.cookies.get('session')):
         delete_session(request.cookies.get('session'))
+    res = make_response(redirect('/'))
+    res.delete_cookie("session")
+    return res
+
+
+@app.route("/api/refresh", methods=['POST'])
+def refresh():
+    if validate_session(request.cookies.get('session')):
+        data = request.json
+        is_ok, new_session = refresh_token(request.cookies.get('session'), data['refresh_token'], data['user_id'])
+        if is_ok:
+            res = make_response()
+            res.set_cookie("session", new_session, httponly=True, samesite="Strict")
+            payload = jwt.decode(new_session, app.secret_key, algorithms="HS256")
+            res.set_cookie("refresh_token", payload['refresh_token'], httponly=False, samesite="Strict")
+            res.set_cookie("expired", str(payload['expired']), httponly=False, samesite="Strict")
+            res.set_cookie("user_id", str(payload['user_id']), httponly=False, samesite="Strict")
+            return res
+        else:
+            res = make_response(redirect('/'))
+            res.delete_cookie("session")
+            return res
     res = make_response(redirect('/'))
     res.delete_cookie("session")
     return res

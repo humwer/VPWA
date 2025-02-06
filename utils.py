@@ -1,4 +1,8 @@
 import os.path
+import random
+import uuid
+import json
+import jwt
 
 from settings import *
 
@@ -30,8 +34,10 @@ def validate_login(login: str, password: str) -> tuple:
     query = f'SELECT id FROM users WHERE username="{login.lower()}" and password="{hashlib.md5(password.encode()).hexdigest()}"'
     result = cursor.execute(query).fetchone()
     if result:
-        new_session = hashlib.md5(random.randbytes(10)).hexdigest()
-        query = f'UPDATE sessions SET session="{new_session}" WHERE id={result[0]}'
+        payload = generate_token(result[0], login)
+        new_session = jwt.encode(payload, app.secret_key, algorithm="HS256")
+        query = (f'UPDATE sessions SET session="{new_session}", '
+                 f'refresh_token="{payload['refresh_token']}" WHERE id={result[0]}')
         cursor.execute(query)
         conn.commit()
         cursor.close()
@@ -57,7 +63,10 @@ def validate_registration(login: str, password: str, confirm_password: str) -> t
             conn.commit()
             return 1, f'Новый пользователь {login} зарегистрирован!'
         return 0, 'Такой пользователь уже зарегистрирован!'
-    query = f'INSERT INTO "users" ("username","password", "role") VALUES ("{login}","{hashlib.md5(password.encode()).hexdigest()}", "user");'
+    random_id = random.randint(100000, 999999)
+    while cursor.execute(f'SELECT id FROM users WHERE id="{random_id}"').fetchone():
+        random_id = random.randint(100000, 999999)
+    query = f'INSERT INTO "users" ("id","username","password", "role") VALUES ({random_id},"{login}","{hashlib.md5(password.encode()).hexdigest()}", "user");'
     cursor.execute(query)
     conn.commit()
     query = f'SELECT id FROM users WHERE username="{login}"'
@@ -130,16 +139,39 @@ def get_comments_from_post(post_id: str) -> list:
     conn, cursor = connect_to_db()
     query = f'SELECT * FROM comments WHERE post_id={post_id}'
     comments = cursor.execute(query).fetchall()
-    cursor.close()
     data = []
     for comment in comments:
+        query = f'SELECT id FROM users WHERE username="{comment[2]}"'
+        user_id = cursor.execute(query).fetchone()[0]
         try:
-            data.append({'username': comment[2], 'msg': render_template_string(comment[3])})
+            data.append({'username': comment[2], 'msg': render_template_string(comment[3]), 'user_id': user_id})
         except Exception as err:
-            data.append({'username': comment[2],
+            data.append({'username': comment[2], 'user_id': user_id,
                          'msg': render_template_string("<i>Возникла ошибка при формировании комментария</i>")})
+    cursor.close()
     return data
 
+
+def generate_token(user_id, login):
+    refresh_token = uuid.uuid4().hex
+    expired = int((datetime.now() + timedelta(minutes=1)).timestamp())
+    return {"user_id": user_id, "username": login, "refresh_token": refresh_token, 'expired': expired}
+
+
+def refresh_token(jwt_token, ref_token, user_id):
+    jwt_token = jwt.decode(jwt_token, app.secret_key, algorithms="HS256")
+    if jwt_token['refresh_token'] == ref_token:
+        conn, cursor = connect_to_db()
+        payload = generate_token(user_id, jwt_token['username'])
+        new_session = jwt.encode(payload, app.secret_key, algorithm="HS256")
+        query = (f'UPDATE sessions SET session="{new_session}", '
+                 f'refresh_token="{payload['refresh_token']}" WHERE id={user_id}')
+        cursor.execute(query)
+        conn.commit()
+        cursor.close()
+        return 1, new_session
+    else:
+        return 0, ''
 
 def add_comment_to_post(post_id: str, username: str, comment: str) -> bool:
     try:

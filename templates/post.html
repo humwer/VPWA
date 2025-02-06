@@ -25,7 +25,7 @@
         <div class="comment-blog">
             <div class="info">
                 <a href="/posts/{{context.post_id}}#{{loop.index}}" class="number">#{{loop.index}}</a>
-                <a href="/profile/#" class="author">{{comment.username}}</a>
+                <a href="/profile/#" class="author" data-user-id="{{ comment.user_id }}">{{comment.username}}</a>
             </div>
             <div class="comment">
                 {% autoescape false %}

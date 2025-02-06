@@ -1,7 +1,7 @@
 from flask import (Flask, render_template_string, render_template, request, make_response, send_from_directory,
                    redirect, url_for)
 from werkzeug.exceptions import HTTPException
-from datetime import datetime
+from datetime import datetime, timedelta
 from lxml import etree
 import requests
 import sqlite3
@@ -31,6 +31,7 @@ app.flag_xxe = "FLAG{1_7h0ugh7_w0u1d_b3_7h3_p1c7ur3}"       # +
 app.flag_path = "FLAG{W4F_1$n7_7h3_pr0bl3m_70_u?}"          # +
 app.flag_ssrf = "FLAG{1n73rn4l_$3rv3r_1$n7_1n73rn4l?}"      # +
 app.config['flag'] = app.flag_ssti
+app.secret_key = "w0wth1s1$Sup3R$3CR37K3y!!!"
 
 # ---------------->
 app.PARSER = etree.XMLParser(resolve_entities=True)
@@ -67,13 +68,13 @@ def prepare_db():
 
     queries = ['PRAGMA case_sensitive_like=ON;', """
         CREATE TABLE IF NOT EXISTS "users" (
-                "id"            INTEGER NOT NULL UNIQUE,
+                "id"            INTEGER NOT NULL UNIQUE DEFAULT (abs(random()) % 900000 + 100000),
                 "username"      TEXT(3, 50) NOT NULL UNIQUE,
                 "password"      TEXT(3, 50) NOT NULL,
                 "role"          TEXT(3, 50) NOT NULL,
                 "session_id"    INTEGER,
                 FOREIGN KEY(session_id) REFERENCES sessions(id),
-                PRIMARY KEY("id" AUTOINCREMENT)
+                PRIMARY KEY("id")
         );""", """
         CREATE TABLE IF NOT EXISTS "flag" (
                 "id"            INTEGER NOT NULL UNIQUE,
@@ -87,20 +88,21 @@ def prepare_db():
                 PRIMARY KEY("id" AUTOINCREMENT)
         );""", """
         CREATE TABLE IF NOT EXISTS "sessions" (
-                "id"            INTEGER NOT NULL UNIQUE,
-                "session"       TEXT(32)
+                "id"                    INTEGER NOT NULL UNIQUE,
+                "session"               TEXT(32),
+                "refresh_token"         TEXT(32)
         );""",
-               f'INSERT INTO "sessions" ("id") VALUES (1), (2), (3), (4), (5);',
+               f'INSERT INTO "sessions" ("id") VALUES (643792), (236045), (945635), (234845), (112359);',
                f'INSERT INTO "users" ("id","username","password", "role", "session_id") '
-               f'VALUES (1,"admin","{hashlib.md5("$up3rm3g4d1ff1cul7p@$$w0rd@#__?.<#".encode()).hexdigest()}", "admin", "1");',
+               f'VALUES (643792,"admin","{hashlib.md5("$up3rm3g4d1ff1cul7p@$$w0rd@#__?.<#".encode()).hexdigest()}", "admin", "643792");',
                f'INSERT INTO "users" ("id","username","password", "role", "session_id") '
-               f'VALUES (2,"support","{hashlib.md5("trustno1".encode()).hexdigest()}", "support", "2");',
+               f'VALUES (236045,"support","{hashlib.md5("trustno1".encode()).hexdigest()}", "support", "236045");',
                f'INSERT INTO "users" ("id","username","password", "role", "session_id") '
-               f'VALUES (3,"Franky","{hashlib.md5(random.randbytes(3)).hexdigest()}", "user", "3");',
+               f'VALUES (945635,"Franky","{hashlib.md5(random.randbytes(3)).hexdigest()}", "user", "945635");',
                f'INSERT INTO "users" ("id","username","password", "role", "session_id") '
-               f'VALUES (4,"Alice","{hashlib.md5(random.randbytes(4)).hexdigest()}", "user", "4");',
+               f'VALUES (234845,"Alice","{hashlib.md5(random.randbytes(4)).hexdigest()}", "user", "234845");',
                f'INSERT INTO "users" ("id","username","password", "role", "session_id") '
-               f'VALUES (5,"C00lB0y","{hashlib.md5(random.randbytes(5)).hexdigest()}", "user", "5");',
+               f'VALUES (112359,"C00lB0y","{hashlib.md5(random.randbytes(5)).hexdigest()}", "user", "112359");',
                f'INSERT INTO "flag" ("id", "flag_value") VALUES (1337,"{app.flag_sqli}");', """
        CREATE TABLE IF NOT EXISTS "posts" (
                "id"            INTEGER NOT NULL UNIQUE,
@@ -166,4 +168,4 @@ def prepare_files_with_flags():
 def prepare():
     prepare_db()
     prepare_comments_db()
-    prepare_files_with_flags()
+    #prepare_files_with_flags()
