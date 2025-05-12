@@ -142,7 +142,10 @@ def get_comments_from_post(post_id: str) -> list:
     data = []
     for comment in comments:
         query = f'SELECT id FROM users WHERE username="{comment[2]}"'
-        user_id = cursor.execute(query).fetchone()[0]
+        if comment[2] != 'support':
+            user_id = cursor.execute(query).fetchone()[0]
+        else:
+            user_id = 'Ищи другой путь'
         try:
             data.append({'username': comment[2], 'msg': render_template_string(comment[3]), 'user_id': user_id})
         except Exception as err:
