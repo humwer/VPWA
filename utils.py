@@ -6,6 +6,8 @@ import jwt
 
 from settings import *
 
+SECRET_KEY = 'w0wth1s1$Sup3R$3CR37K3y!!!'
+
 
 def is_login(text: str) -> bool:
     if re.fullmatch("[A-Za-z0-9]*", text):
@@ -31,14 +33,13 @@ def validate_login(login: str, password: str) -> tuple:
     if not is_login(login):
         return 0, 'Некорректный логин пользователя'
     conn, cursor = connect_to_db()
-    query = f'SELECT id FROM users WHERE username="{login.lower()}" and password="{hashlib.md5(password.encode()).hexdigest()}"'
-    result = cursor.execute(query).fetchone()
+    query = f'SELECT id FROM users WHERE username=? and password=?'
+    result = cursor.execute(query, (login.lower(), hashlib.md5(password.encode()).hexdigest(), )).fetchone()
     if result:
         payload = generate_token(result[0], login)
-        new_session = jwt.encode(payload, app.secret_key, algorithm="HS256")
-        query = (f'UPDATE sessions SET session="{new_session}", '
-                 f'refresh_token="{payload['refresh_token']}" WHERE id={result[0]}')
-        cursor.execute(query)
+        new_session = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+        query = f'UPDATE sessions SET session=?, refresh_token=? WHERE id=?'
+        cursor.execute(query, (new_session, payload['refresh_token'], result[0]))
         conn.commit()
         cursor.close()
         return 1, new_session
@@ -52,25 +53,25 @@ def validate_registration(login: str, password: str, confirm_password: str) -> t
     if password != confirm_password:
         return 0, 'Пароли не совпадают!'
     conn, cursor = connect_to_db()
-    query = f'SELECT username FROM users WHERE username like "{login}"'
-    result = cursor.execute(query).fetchone()
+    query = f'SELECT username FROM users WHERE username like ?'
+    result = cursor.execute(query, (login, )).fetchone()
     if result:
         if login != result[0]:
             if login.lower() == 'support':
                 return 0, 'Пользователю support запрещена смена пароля!'
-            query = f'UPDATE users SET password="{hashlib.md5(password.encode()).hexdigest()}" WHERE username="{result[0]}"'
-            cursor.execute(query)
+            query = f'UPDATE users SET password=? WHERE username=?'
+            cursor.execute(query, (hashlib.md5(password.encode()).hexdigest(), result[0], ))
             conn.commit()
             return 1, f'Новый пользователь {login} зарегистрирован!'
         return 0, 'Такой пользователь уже зарегистрирован!'
     random_id = random.randint(100000, 999999)
-    while cursor.execute(f'SELECT id FROM users WHERE id="{random_id}"').fetchone():
+    while cursor.execute(f'SELECT id FROM users WHERE id=?', (random_id, )).fetchone():
         random_id = random.randint(100000, 999999)
-    query = f'INSERT INTO "users" ("id","username","password", "role") VALUES ({random_id},"{login}","{hashlib.md5(password.encode()).hexdigest()}", "user");'
-    cursor.execute(query)
+    query = f'INSERT INTO "users" ("id","username","password", "role") VALUES (?, ?, ?, "user");'
+    cursor.execute(query, (random_id, login, hashlib.md5(password.encode()).hexdigest(), ))
     conn.commit()
-    query = f'SELECT id FROM users WHERE username="{login}"'
-    result = cursor.execute(query).fetchone()
+    query = f'SELECT id FROM users WHERE username=?'
+    result = cursor.execute(query, (login, )).fetchone()
     conn.commit()
     queries = [f'INSERT INTO sessions ("id") VALUES ({result[0]})',
                f'UPDATE users SET session_id={result[0]} WHERE username="{login}"']
@@ -81,11 +82,11 @@ def validate_registration(login: str, password: str, confirm_password: str) -> t
 
 def validate_role(session: str, role: str) -> bool:
     conn, cursor = connect_to_db()
-    query = f'SELECT id FROM sessions WHERE session="{session}"'
-    result = cursor.execute(query).fetchone()
+    query = f'SELECT id FROM sessions WHERE session=?'
+    result = cursor.execute(query, (session, )).fetchone()
     if result:
-        query = f'SELECT role FROM users WHERE session_id={result[0]}'
-        result = cursor.execute(query).fetchone()
+        query = f'SELECT role FROM users WHERE session_id=?'
+        result = cursor.execute(query, (result[0], )).fetchone()
         cursor.close()
         if result[0] == role:
             return True
@@ -96,11 +97,11 @@ def validate_role(session: str, role: str) -> bool:
 
 def validate_session(session: str) -> str:
     conn, cursor = connect_to_db()
-    query = f'SELECT id FROM sessions WHERE session="{session}"'
-    result = cursor.execute(query).fetchone()
+    query = f'SELECT id FROM sessions WHERE session=?'
+    result = cursor.execute(query, (session, )).fetchone()
     if result:
-        query = f'SELECT username FROM users WHERE session_id={result[0]}'
-        result = cursor.execute(query).fetchone()
+        query = f'SELECT username FROM users WHERE session_id=?'
+        result = cursor.execute(query, (result[0], )).fetchone()
         cursor.close()
         return result[0]
     cursor.close()
@@ -109,8 +110,8 @@ def validate_session(session: str) -> str:
 
 def delete_session(session: str):
     conn, cursor = connect_to_db()
-    query = f'UPDATE sessions SET session="" WHERE session="{session}"'
-    cursor.execute(query)
+    query = f'UPDATE sessions SET session="" WHERE session=?'
+    cursor.execute(query, (session, ))
     conn.commit()
     cursor.close()
 
@@ -129,21 +130,21 @@ def get_posts() -> list:
 
 def get_post(post_id: str) -> dict:
     conn, cursor = connect_to_db()
-    query = f'SELECT * FROM posts WHERE id={post_id}'
-    post = cursor.execute(query).fetchone()
+    query = f'SELECT * FROM posts WHERE id=?'
+    post = cursor.execute(query, (post_id, )).fetchone()
     cursor.close()
     return post
 
 
 def get_comments_from_post(post_id: str) -> list:
     conn, cursor = connect_to_db()
-    query = f'SELECT * FROM comments WHERE post_id={post_id}'
-    comments = cursor.execute(query).fetchall()
+    query = f'SELECT * FROM comments WHERE post_id=?'
+    comments = cursor.execute(query, (post_id, )).fetchall()
     data = []
     for comment in comments:
-        query = f'SELECT id FROM users WHERE username="{comment[2]}"'
+        query = f'SELECT id FROM users WHERE username=?'
         if comment[2] != 'support':
-            user_id = cursor.execute(query).fetchone()[0]
+            user_id = cursor.execute(query, (comment[2],)).fetchone()[0]
         else:
             user_id = 'Ищи другой путь'
         try:
@@ -162,29 +163,29 @@ def generate_token(user_id, login):
 
 
 def refresh_token(jwt_token, ref_token, user_id):
-    jwt_token = jwt.decode(jwt_token, app.secret_key, algorithms="HS256")
+    jwt_token = jwt.decode(jwt_token, SECRET_KEY, algorithms="HS256")
     if jwt_token['refresh_token'] == ref_token:
         conn, cursor = connect_to_db()
         payload = generate_token(user_id, jwt_token['username'])
-        new_session = jwt.encode(payload, app.secret_key, algorithm="HS256")
-        query = (f'UPDATE sessions SET session="{new_session}", '
-                 f'refresh_token="{payload['refresh_token']}" WHERE id={user_id}')
-        cursor.execute(query)
+        new_session = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+        query = f'UPDATE sessions SET session=?, refresh_token=? WHERE id=?'
+        cursor.execute(query, (new_session, payload['refresh_token'], user_id))
         conn.commit()
         cursor.close()
         return 1, new_session
     else:
         return 0, ''
 
+
 def add_comment_to_post(post_id: str, username: str, comment: str) -> bool:
     try:
         conn, cursor = connect_to_db()
         for exclude in app.EXCLUDE_FOR_SSTI:
-            if exclude in comment:
+            if exclude in comment or '"' in comment:
                 comment = '<i>Возникла ошибка при формировании комментария</i>'
         query = (f'INSERT INTO comments ("post_id", "username", "comment") '
-                 f'VALUES ({post_id}, "{username}", "{comment}");')
-        cursor.execute(query)
+                 f'VALUES (?, ?, ?);')
+        cursor.execute(query, (post_id, username, comment))
         conn.commit()
         cursor.close()
         return True
@@ -219,9 +220,8 @@ def upload_file(file, info_post: dict) -> bool:
             file.save(os.path.join(path_to_upload, new_filename))
         tags = ','.join([tag.strip() for tag in info_post['tags'].split(',')])
         path_in_db = app.UPLOAD_FOLDER + new_filename
-        query = (f'INSERT INTO "posts" ("username", "title", "tags", "content_path", "visible") '
-                 f'VALUES ("{info_post['username']}", "{info_post['title']}", "{tags}", "{path_in_db}", 1);')
-        cursor.execute(query)
+        query = f'INSERT INTO "posts" ("username", "title", "tags", "content_path", "visible") VALUES (?, ?, ?, ?, 1);'
+        cursor.execute(query, (info_post['username'], info_post['title'], tags, path_in_db,))
         conn.commit()
     except Exception as err:
         print(f'[-] {err}')

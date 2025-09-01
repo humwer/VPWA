@@ -31,7 +31,7 @@ app.flag_xxe = "FLAG{1_7h0ugh7_w0u1d_b3_7h3_p1c7ur3}"       # +
 app.flag_path = "FLAG{W4F_1$n7_7h3_pr0bl3m_70_u?}"          # +
 app.flag_ssrf = "FLAG{1n73rn4l_$3rv3r_1$n7_1n73rn4l?}"      # +
 app.config['flag'] = app.flag_ssti
-app.secret_key = "w0wth1s1$Sup3R$3CR37K3y!!!"
+app.secret_key = "$ur3, d0 u 7h1nk 7h1s 1s 7h3 wh013 $3cr3t?"
 
 # ---------------->
 app.PARSER = etree.XMLParser(resolve_entities=True)
