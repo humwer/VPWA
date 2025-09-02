@@ -6,8 +6,6 @@ import jwt
 
 from settings import *
 
-SECRET_KEY = 'w0wth1s1$Sup3R$3CR37K3y!!!'
-
 
 def is_login(text: str) -> bool:
     if re.fullmatch("[A-Za-z0-9]*", text):

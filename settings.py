@@ -8,6 +8,7 @@ import sqlite3
 import hashlib
 import base64
 import random
+import time
 import os
 import re
 
@@ -21,6 +22,7 @@ app.EXCLUDE_LFI = [':', '.py', '.ini', '1bf549a3128aaf9f20293d2566651703']
 app.EXCLUDE_FOR_SSTI = ('popen', 'write', 'os', 'import', 'mro', 'exec')
 host = "0.0.0.0"
 port = 6177
+SECRET_KEY = 'w0wth1s1$Sup3R$3CR37K3y!!!'
 # ----------------<
 app.flag_auth = "FLAG{N3w_func710n_4_r3g1$7r4710n!}"        # +
 app.flag_brute = "FLAG{W34k_p@$$w0rd_1$_7r0bl3!}"           # +
