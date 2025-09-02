@@ -98,7 +98,7 @@ def prepare_db():
                f'INSERT INTO "users" ("id","username","password", "role", "session_id") '
                f'VALUES (643792,"admin","{hashlib.md5("$up3rm3g4d1ff1cul7p@$$w0rd@#__?.<#".encode()).hexdigest()}", "admin", "643792");',
                f'INSERT INTO "users" ("id","username","password", "role", "session_id") '
-               f'VALUES (236045,"support","{hashlib.md5("trustno1".encode()).hexdigest()}", "support", "236045");',
+               f'VALUES (236045,"support","{hashlib.md5("takecare".encode()).hexdigest()}", "support", "236045");',
                f'INSERT INTO "users" ("id","username","password", "role", "session_id") '
                f'VALUES (945635,"Franky","{hashlib.md5(random.randbytes(3)).hexdigest()}", "user", "945635");',
                f'INSERT INTO "users" ("id","username","password", "role", "session_id") '
