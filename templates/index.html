@@ -22,8 +22,8 @@
     <span class="main post" style="text-align: center"><b>{{ context.support.1 }}</b></span>
     {% endif %}
     {% for post in context.posts %}
+    {% if post.visible != 0 %}
     <div class="main post">
-      {% if post.visible != 0 %}
       <header>
         <a class="title" href="/posts/{{post.id}}">{{post.title}}</a>
         <p class="author">Автор: {{ post.author }}</p>
@@ -34,8 +34,8 @@
         <span class="tag">{{tag}}</span>
         {% endfor %}
       </div>
-      {% endif %}
     </div>
+    {% endif %}
     {% endfor %}
   </div>
 </div>
