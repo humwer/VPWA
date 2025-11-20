@@ -14,6 +14,7 @@
 >6. **XSS & Cookie without HttpOnly**
 >7. **Path Traversal**
 >8. **SSRF**
+>9. **Insecure token refresh**
 
 </details>
 
