@@ -3,11 +3,11 @@ from aiohttp import web
 
 
 API_KEYS = [hashlib.md5(random.randbytes(i*10)).hexdigest() for i in range(20)]
-API_KEYS[11] = hashlib.md5(app.flag_ssrf.encode('utf-8')).hexdigest()
+API_KEYS[11] = hashlib.md5(FLAG_SSRF.encode('utf-8')).hexdigest()
 API_KEYS_VALUES = {}
 for key in API_KEYS:
-    if key == hashlib.md5(app.flag_ssrf.encode('utf-8')).hexdigest():
-        API_KEYS_VALUES[key] = app.flag_ssrf
+    if key == hashlib.md5(FLAG_SSRF.encode('utf-8')).hexdigest():
+        API_KEYS_VALUES[key] = FLAG_SSRF
     else:
         API_KEYS_VALUES[key] = hashlib.sha256(key.encode('utf-8')).hexdigest()
 

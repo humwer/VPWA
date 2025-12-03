@@ -23,17 +23,21 @@ app.ALLOWED_MIMETYPE = ('image/gif', 'image/jpeg', 'image/png', 'image/svg+xml')
 app.EXCLUDE_LFI = [':', '.py', '.ini', XXE_FILE]
 app.EXCLUDE_FOR_SSTI = ('popen', 'write', 'os', 'import', 'mro', 'exec')
 # ----------------<
-app.flag_auth = "FLAG{N3w_func710n_4_r3g1$7r4710n!}"
-app.flag_brute = "FLAG{W34k_p@$$w0rd_1$_7r0bl3!}"
-app.flag_sqli = "FLAG{D0_u_l1k3_$QL_1nj3c710n$?}"
-app.flag_xss = "FLAG{0op$_c00k13_w17h0u7_h77p_0n1y?}"
-app.flag_ssti = "FLAG{My_f4v0ur173_73mp1473$_1nj3c710n}"
-app.flag_ssrf = "FLAG{1n73rn4l_$3rv3r_1$n7_1n73rn4l?}"
 app.config['flag'] = FLAG_SSTI
 app.secret_key = "$ur3, d0 u 7h1nk 7h1s 1s 7h3 wh013 $3cr3t?"
 
 # ---------------->
 app.PARSER = etree.XMLParser(resolve_entities=True)
+
+
+# Загрузка модулей
+# ----------------
+profile = modules.read_profile()
+validate_registration = modules.load_validation_registration_module(profile['validate_registration'])
+search_posts = modules.load_search_posts_module(profile['search_posts'])
+refresh_token = modules.load_refresh_token_module(profile['refresh_token'])
+get_comments_from_post = modules.load_get_comments_from_post_module(profile['get_comments_from_post'])
+# ----------------
 
 
 def connect_to_db() -> tuple:
@@ -151,19 +155,6 @@ def prepare_comments_db():
     data = multiple_queries_to_db(queries, cursor, conn)
     cursor.close()
     print('[+] Comments to database sqli.db were add!')
-
-
-"""
-----------------
-Загрузка модулей
-----------------
-"""
-profile = modules.read_profile()
-validate_registration = modules.load_validation_registration_module(profile['validate_registration'])
-search_posts = modules.load_search_posts_module(profile['search_posts'])
-"""
-----------------
-"""
 
 
 def prepare_files_with_flags():

@@ -101,52 +101,17 @@ def get_post(post_id: str) -> dict:
     return post
 
 
-def get_comments_from_post(post_id: str) -> list:
-    conn, cursor = connect_to_db()
-    query = f'SELECT * FROM comments WHERE post_id=?'
-    comments = cursor.execute(query, (post_id, )).fetchall()
-    data = []
-    for comment in comments:
-        query = f'SELECT id FROM users WHERE username=?'
-        if comment[2] != 'support':
-            user_id = cursor.execute(query, (comment[2],)).fetchone()[0]
-        else:
-            user_id = 'Ищи другой путь'
-        try:
-            data.append({'username': comment[2], 'msg': render_template_string(comment[3]), 'user_id': user_id})
-        except Exception as err:
-            data.append({'username': comment[2], 'user_id': user_id,
-                         'msg': render_template_string("<i>Возникла ошибка при формировании комментария</i>")})
-    cursor.close()
-    return data
-
-
 def generate_token(user_id, login):
     refresh_token = uuid.uuid4().hex
     expired = int((datetime.now() + timedelta(minutes=1)).timestamp())
     return {"user_id": user_id, "username": login, "refresh_token": refresh_token, 'expired': expired}
 
 
-def refresh_token(jwt_token, ref_token, user_id):
-    jwt_token = jwt.decode(jwt_token, SECRET_KEY, algorithms="HS256")
-    if jwt_token['refresh_token'] == ref_token:
-        conn, cursor = connect_to_db()
-        payload = generate_token(user_id, jwt_token['username'])
-        new_session = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
-        query = f'UPDATE sessions SET session=?, refresh_token=? WHERE id=?'
-        cursor.execute(query, (new_session, payload['refresh_token'], user_id))
-        conn.commit()
-        cursor.close()
-        return 1, new_session
-    else:
-        return 0, ''
-
-
 def add_comment_to_post(post_id: str, username: str, comment: str) -> bool:
     try:
         conn, cursor = connect_to_db()
         for exclude in app.EXCLUDE_FOR_SSTI:
-            if exclude in comment or '"' in comment:
+            if exclude in comment:
                 comment = '<i>Возникла ошибка при формировании комментария</i>'
         query = (f'INSERT INTO comments ("post_id", "username", "comment") '
                  f'VALUES (?, ?, ?);')

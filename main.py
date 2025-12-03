@@ -20,8 +20,8 @@ def index():
         context_login = True
     context_admin = validate_role(request.cookies.get('session'), 'admin')
     context_support = validate_role(request.cookies.get('session'), 'support')
-    context = {"login": context_login, "username": username, "admin": [context_admin, app.flag_auth],
-               'posts': get_posts(), "support": [context_support, app.flag_brute]}
+    context = {"login": context_login, "username": username, "admin": [context_admin, FLAG_AUTH],
+               'posts': get_posts(), "support": [context_support, FLAG_BRUTEHASH]}
     res = make_response(render_template("index.html", context=context))
     return res
 
@@ -48,7 +48,7 @@ def status():
     context_admin = validate_role(request.cookies.get('session'), 'admin')
     if username:
         context_login = True
-    context = {"login": context_login, "username": username, "admin": [context_admin, app.flag_auth]}
+    context = {"login": context_login, "username": username, "admin": [context_admin, FLAG_AUTH]}
     if request.method == "GET":
         return make_response(render_template("status.html", context=context))
     else:
@@ -79,7 +79,7 @@ def search():
     if 'filter' not in data:
         return redirect("/")
     posts = search_posts(request.form.get('filter'), request.form.get('search'))
-    context = {"login": context_login, "username": username, "admin": [context_admin, app.flag_auth],
+    context = {"login": context_login, "username": username, "admin": [context_admin, FLAG_AUTH],
                'posts': posts, "support": context_support}
     return make_response(render_template("index.html", context=context))
 
@@ -93,7 +93,7 @@ def post(post_id):
         context_login = True
         context["username"] = username
     context_admin = validate_role(request.cookies.get('session'), 'admin')
-    context["admin"] = [context_admin, app.flag_auth]
+    context["admin"] = [context_admin, FLAG_AUTH]
     context["login"] = context_login
     context["post_id"] = post_id
     comments = get_comments_from_post(post_id)
@@ -117,7 +117,7 @@ def new_post():
     if username:
         context_login = True
     context_admin = validate_role(request.cookies.get('session'), 'admin')
-    context = {"login": context_login, "username": username, "admin": [context_admin, app.flag_auth]}
+    context = {"login": context_login, "username": username, "admin": [context_admin, FLAG_AUTH]}
     if request.method == "GET":
         return make_response(render_template("add_post.html", context=context))
     else:
@@ -134,7 +134,7 @@ def login():
     msg = ''
     context = {}
     context_admin = validate_role(request.cookies.get('session'), 'admin')
-    context["admin"] = [context_admin, app.flag_auth]
+    context["admin"] = [context_admin, FLAG_AUTH]
     if request.method == "GET":
         if validate_session(request.cookies.get('session')):
             return make_response(redirect('/'))
@@ -192,7 +192,7 @@ def refresh():
 def register():
     context = {'msg': None}
     context_admin = validate_role(request.cookies.get('session'), 'admin')
-    context["admin"] = [context_admin, app.flag_auth]
+    context["admin"] = [context_admin, FLAG_AUTH]
     if request.method == "GET":
         if validate_session(request.cookies.get('session')):
             return redirect('/')

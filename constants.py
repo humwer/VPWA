@@ -9,7 +9,7 @@ RAND_FLAG_TABLE = random.randint(0, 9)
 
 # Flags
 FLAG_AUTH = "FLAG{N3w_func710n_4_r3g1$7r4710n!}"
-FLAG_BRUTE = "FLAG{W34k_p@$$w0rd_1$_7r0bl3!}"
+FLAG_BRUTEHASH = "FLAG{W34k_p@$$w0rd_1$_7r0bl3!}"
 FLAG_SQLI = "FLAG{D0_u_l1k3_$QL_1nj3c710n$?}"
 FLAG_XSS = "FLAG{0op$_c00k13_w17h0u7_h77p_0n1y?}"
 FLAG_SSTI = "FLAG{My_f4v0ur173_73mp1473$_1nj3c710n}"
