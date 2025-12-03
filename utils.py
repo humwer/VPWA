@@ -207,7 +207,7 @@ def upload_file(file, info_post: dict) -> bool:
         if extension == "svg":
             data_file = file.stream.readlines()
             for line in data_file:
-                if b'a6cbab90ebc8b8fa1b3052e56d88a5e5' in line:
+                if PT_FILE.encode('utf-8') in line:
                     raise Exception('PATH TRAVERSAL FLAG')
             doc = etree.fromstring(b''.join([line for line in data_file]), app.PARSER)
             svg_content = etree.tostring(doc)

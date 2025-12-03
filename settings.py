@@ -1,8 +1,9 @@
 from flask import (Flask, render_template_string, render_template, request, make_response, send_from_directory,
-                   redirect, url_for)
+                   redirect, url_for, blueprints)
 from werkzeug.exceptions import HTTPException
 from datetime import datetime, timedelta
 from lxml import etree
+from constants import *
 import requests
 import sqlite3
 import hashlib
@@ -14,25 +15,20 @@ import re
 
 # ---------------->
 app = Flask(__name__)
-app.DB_NAME = 'sqli.db'
+app.DB_NAME = 'sql.db'
 app.UPLOAD_FOLDER = '/static/'
 app.ALLOWED_EXTENSIONS = ('gif', 'jpg', 'jpeg', 'png', 'svg')
 app.ALLOWED_MIMETYPE = ('image/gif', 'image/jpeg', 'image/png', 'image/svg+xml')
-app.EXCLUDE_LFI = [':', '.py', '.ini', '1bf549a3128aaf9f20293d2566651703']
+app.EXCLUDE_LFI = [':', '.py', '.ini', XXE_FILE]
 app.EXCLUDE_FOR_SSTI = ('popen', 'write', 'os', 'import', 'mro', 'exec')
-host = "0.0.0.0"
-port = 6177
-SECRET_KEY = 'w0wth1s1$Sup3R$3CR37K3y!!!'
 # ----------------<
-app.flag_auth = "FLAG{N3w_func710n_4_r3g1$7r4710n!}"        # +
-app.flag_brute = "FLAG{W34k_p@$$w0rd_1$_7r0bl3!}"           # +
-app.flag_sqli = "FLAG{D0_u_l1k3_$QL_1nj3c710n$?}"           # +
-app.flag_xss = "FLAG{0op$_c00k13_w17h0u7_h77p_0n1y?}"       # +
-app.flag_ssti = "FLAG{My_f4v0ur173_73mp1473$_1nj3c710n}"    # +
-app.flag_xxe = "FLAG{1_7h0ugh7_w0u1d_b3_7h3_p1c7ur3}"       # +
-app.flag_path = "FLAG{W4F_1$n7_7h3_pr0bl3m_70_u?}"          # +
-app.flag_ssrf = "FLAG{1n73rn4l_$3rv3r_1$n7_1n73rn4l?}"      # +
-app.config['flag'] = app.flag_ssti
+app.flag_auth = "FLAG{N3w_func710n_4_r3g1$7r4710n!}"
+app.flag_brute = "FLAG{W34k_p@$$w0rd_1$_7r0bl3!}"
+app.flag_sqli = "FLAG{D0_u_l1k3_$QL_1nj3c710n$?}"
+app.flag_xss = "FLAG{0op$_c00k13_w17h0u7_h77p_0n1y?}"
+app.flag_ssti = "FLAG{My_f4v0ur173_73mp1473$_1nj3c710n}"
+app.flag_ssrf = "FLAG{1n73rn4l_$3rv3r_1$n7_1n73rn4l?}"
+app.config['flag'] = FLAG_SSTI
 app.secret_key = "$ur3, d0 u 7h1nk 7h1s 1s 7h3 wh013 $3cr3t?"
 
 # ---------------->
@@ -77,8 +73,8 @@ def prepare_db():
                 "session_id"    INTEGER,
                 FOREIGN KEY(session_id) REFERENCES sessions(id),
                 PRIMARY KEY("id")
-        );""", """
-        CREATE TABLE IF NOT EXISTS "flag" (
+        );""", f"""
+        CREATE TABLE IF NOT EXISTS "flag_{RAND_FLAG_TABLE}" (
                 "id"            INTEGER NOT NULL UNIQUE,
                 "flag_value"    TEXT(50)
         );""", """
@@ -94,18 +90,18 @@ def prepare_db():
                 "session"               TEXT(32),
                 "refresh_token"         TEXT(32)
         );""",
-               f'INSERT INTO "sessions" ("id") VALUES (643792), (236045), (945635), (234845), (112359);',
+               f'INSERT INTO "sessions" ("id") VALUES ({ADMIN_ID}), ({SUPPORT_ID}), ({UNIQ_ID[2]}), ({UNIQ_ID[3]}), ({UNIQ_ID[4]});',
                f'INSERT INTO "users" ("id","username","password", "role", "session_id") '
-               f'VALUES (643792,"admin","{hashlib.md5("$up3rm3g4d1ff1cul7p@$$w0rd@#__?.<#".encode()).hexdigest()}", "admin", "643792");',
+               f'VALUES ({ADMIN_ID},"admin","{ADMIN_PASS}", "admin", "{ADMIN_ID}");',
                f'INSERT INTO "users" ("id","username","password", "role", "session_id") '
-               f'VALUES (236045,"support","{hashlib.md5("takecare".encode()).hexdigest()}", "support", "236045");',
+               f'VALUES ({SUPPORT_ID},"support","{SUPPORT_PASS}", "support", "{SUPPORT_ID}");',
                f'INSERT INTO "users" ("id","username","password", "role", "session_id") '
-               f'VALUES (945635,"Franky","{hashlib.md5(random.randbytes(3)).hexdigest()}", "user", "945635");',
+               f'VALUES ({UNIQ_ID[2]},"Franky","{hashlib.md5(random.randbytes(3)).hexdigest()}", "user", "{UNIQ_ID[2]}");',
                f'INSERT INTO "users" ("id","username","password", "role", "session_id") '
-               f'VALUES (234845,"Alice","{hashlib.md5(random.randbytes(4)).hexdigest()}", "user", "234845");',
+               f'VALUES ({UNIQ_ID[3]},"Alice","{hashlib.md5(random.randbytes(4)).hexdigest()}", "user", "{UNIQ_ID[3]}");',
                f'INSERT INTO "users" ("id","username","password", "role", "session_id") '
-               f'VALUES (112359,"C00lB0y","{hashlib.md5(random.randbytes(5)).hexdigest()}", "user", "112359");',
-               f'INSERT INTO "flag" ("id", "flag_value") VALUES (1337,"{app.flag_sqli}");', """
+               f'VALUES ({UNIQ_ID[4]},"C00lB0y","{hashlib.md5(random.randbytes(5)).hexdigest()}", "user", "{UNIQ_ID[4]}");',
+               f'INSERT INTO "flag_{RAND_FLAG_TABLE}" ("id", "flag_value") VALUES (1337,"{FLAG_SQLI}");', """
        CREATE TABLE IF NOT EXISTS "posts" (
                "id"            INTEGER NOT NULL UNIQUE,
                "username"      TEXT(3, 50) NOT NULL,
@@ -123,7 +119,7 @@ def prepare_db():
                f'VALUES (3, "Alice", "Милый котик :)", "Cats,Image,Cute", "/static/content_3.jpg", 1);',
                f'INSERT INTO "posts" ("id", "username", "title", "tags", "content_path", "visible") '
                f'VALUES (4, "C00lB0y", "Хацкеры такие хацкеры", "Image,Humor", "/static/content_4.jpg", 1);',
-               ]
+    ]
 
     data = multiple_queries_to_db(queries, cursor, conn)
     cursor.close()
@@ -143,7 +139,7 @@ def prepare_comments_db():
         f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
         f'VALUES (4, 2, "admin", "<b>support</b>, ты посмотрел тот файлик? ^.^");',
         f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
-        f'VALUES (5, 2, "support", "Ты про этот /tmp/1bf549a3128aaf9f20293d2566651703? Ага...<br>Слушай, а ты обезопасил форму загрузки постов? >_> ");',
+        f'VALUES (5, 2, "support", "Ты про этот /tmp/{XXE_FILE}? Ага...<br>Слушай, а ты обезопасил форму загрузки постов? >_> ");',
         f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
         f'VALUES (6, 2, "admin", "А? Да не, всё должно быть пучком, не переживай :) :)");',
         f'INSERT INTO "comments" ("id", "post_id", "username", "comment") '
@@ -157,17 +153,17 @@ def prepare_comments_db():
 
 
 def prepare_files_with_flags():
-    path_to_file = '/tmp/a6cbab90ebc8b8fa1b3052e56d88a5e5'
+    path_to_file = f'/tmp/{PT_FILE}'
     file = open(path_to_file, 'w')
-    file.write(app.flag_path)
+    file.write(FLAG_PT)
     file.close()
-    path_to_file = '/tmp/1bf549a3128aaf9f20293d2566651703'
+    path_to_file = f'/tmp/{XXE_FILE}'
     file = open(path_to_file, 'w')
-    file.write(app.flag_xxe)
+    file.write(FLAG_XXE)
     file.close()
 
 
 def prepare():
     prepare_db()
     prepare_comments_db()
-    prepare_files_with_flags()
+    # prepare_files_with_flags()

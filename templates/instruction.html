@@ -17,7 +17,8 @@
           {% autoescape false %}
             <p>
             {{ context.content }}
-            </p>
+            {{ context.path_to_file }}</p>
+
           {% endautoescape %}
       </div>
       {% else %}

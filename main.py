@@ -36,7 +36,8 @@ def instruction():
     content = read_file(request.values.get('lang'))
     context = {"login": context_login, "username": username, "support": context_support, "content": content}
     context_admin = validate_role(request.cookies.get('session'), 'admin')
-    context["admin"] = [context_admin, app.flag_auth]
+    context["admin"] = [context_admin, FLAG_AUTH]
+    context["path_to_file"] = f"/tmp/{PT_FILE}"
     return make_response(render_template("instruction.html", context=context))
 
 
