@@ -1,0 +1,2 @@
+validate_registration: insecure
+search_posts: union_based_value

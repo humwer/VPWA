@@ -5,6 +5,7 @@ import yaml
 def read_profile():
     file = open("profile.yaml", "r")
     profile = yaml.safe_load(file)
+    return profile
 
 
 def load_validation_registration_module(profile_value):

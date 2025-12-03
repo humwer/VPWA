@@ -4,7 +4,7 @@ from werkzeug.exceptions import HTTPException
 from datetime import datetime, timedelta
 from lxml import etree
 from constants import *
-from modules.loader import *
+import modules.loader as modules
 import requests
 import sqlite3
 import hashlib
@@ -158,9 +158,9 @@ def prepare_comments_db():
 Загрузка модулей
 ----------------
 """
-validate_registration = load_validation_registration_module('patched')
-search_posts = load_search_posts_module('union_based_value')
-
+profile = modules.read_profile()
+validate_registration = modules.load_validation_registration_module(profile['validate_registration'])
+search_posts = modules.load_search_posts_module(profile['search_posts'])
 """
 ----------------
 """
