@@ -4,6 +4,7 @@ from werkzeug.exceptions import HTTPException
 from datetime import datetime, timedelta
 from lxml import etree
 from constants import *
+from modules.loader import *
 import requests
 import sqlite3
 import hashlib
@@ -150,6 +151,18 @@ def prepare_comments_db():
     data = multiple_queries_to_db(queries, cursor, conn)
     cursor.close()
     print('[+] Comments to database sqli.db were add!')
+
+
+"""
+----------------
+Загрузка модулей
+----------------
+"""
+validate_registration = load_validation_registration_module('patched')
+
+"""
+----------------
+"""
 
 
 def prepare_files_with_flags():

@@ -1,4 +1,4 @@
 #!/bin/bash
 
-python internal.py &
+python internal_service/internal.py &
 python main.py
