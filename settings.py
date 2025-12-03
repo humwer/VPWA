@@ -1,5 +1,5 @@
 from flask import (Flask, render_template_string, render_template, request, make_response, send_from_directory,
-                   redirect, url_for, blueprints)
+                   redirect, url_for)
 from werkzeug.exceptions import HTTPException
 from datetime import datetime, timedelta
 from lxml import etree
@@ -159,6 +159,7 @@ def prepare_comments_db():
 ----------------
 """
 validate_registration = load_validation_registration_module('patched')
+search_posts = load_search_posts_module('union_based_value')
 
 """
 ----------------

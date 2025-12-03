@@ -11,3 +11,9 @@ def load_validation_registration_module(profile_value):
     module_path = f"modules.validate_registration.{profile_value}.impl"
     module = importlib.import_module(module_path)
     return module.validate_registration
+
+
+def load_search_posts_module(profile_value):
+    module_path = f"modules.search_posts.{profile_value}.impl"
+    module = importlib.import_module(module_path)
+    return module.search_posts
