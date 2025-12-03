@@ -1,4 +1,4 @@
 validate_registration: insecure
 search_posts: union_based_value
 refresh_token: insecure
-get_comments_from_post: xss_and_ssti
+get_comments_from_post: xss_and_ssti_codepen

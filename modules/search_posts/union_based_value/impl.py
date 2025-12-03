@@ -5,7 +5,7 @@ def search_posts(column, value) -> list:
     data = []
 
     try:
-        conn, cursor = connect_to_db()
+        conn, cursor = settings.connect_to_db()
         if ";" in value:
             raise Exception("[?] Крутят скулю в поиске и пытаются сделать stacked")
         if '"' in column or ";" in column:

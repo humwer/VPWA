@@ -4,24 +4,24 @@ import uuid
 import json
 import jwt
 
-from settings import *
+import settings
 
 
 def is_login(text: str) -> bool:
-    if re.fullmatch("[A-Za-z0-9]*", text):
+    if settings.re.fullmatch("[A-Za-z0-9]*", text):
         return True
     return False
 
 
 def is_valid_mimetype(file_mimetype) -> bool:
-    for mimetype in app.ALLOWED_MIMETYPE:
+    for mimetype in settings.app.ALLOWED_MIMETYPE:
         if file_mimetype == mimetype:
             return True
     return False
 
 
 def is_valid_extension(file_extension) -> bool:
-    for extension in app.ALLOWED_EXTENSIONS:
+    for extension in settings.app.ALLOWED_EXTENSIONS:
         if file_extension == extension:
             return True
     return False
@@ -30,12 +30,12 @@ def is_valid_extension(file_extension) -> bool:
 def validate_login(login: str, password: str) -> tuple:
     if not is_login(login):
         return 0, 'Некорректный логин пользователя'
-    conn, cursor = connect_to_db()
+    conn, cursor = settings.connect_to_db()
     query = f'SELECT id FROM users WHERE username=? and password=?'
-    result = cursor.execute(query, (login.lower(), hashlib.md5(password.encode()).hexdigest(), )).fetchone()
+    result = cursor.execute(query, (login.lower(), settings.hashlib.md5(password.encode()).hexdigest(), )).fetchone()
     if result:
         payload = generate_token(result[0], login)
-        new_session = jwt.encode(payload, SECRET_KEY, algorithm="HS256")
+        new_session = jwt.encode(payload, settings.SECRET_KEY, algorithm="HS256")
         query = f'UPDATE sessions SET session=?, refresh_token=? WHERE id=?'
         cursor.execute(query, (new_session, payload['refresh_token'], result[0]))
         conn.commit()
@@ -46,7 +46,7 @@ def validate_login(login: str, password: str) -> tuple:
 
 
 def validate_role(session: str, role: str) -> bool:
-    conn, cursor = connect_to_db()
+    conn, cursor = settings.connect_to_db()
     query = f'SELECT id FROM sessions WHERE session=?'
     result = cursor.execute(query, (session, )).fetchone()
     if result:
@@ -61,7 +61,7 @@ def validate_role(session: str, role: str) -> bool:
 
 
 def validate_session(session: str) -> str:
-    conn, cursor = connect_to_db()
+    conn, cursor = settings.connect_to_db()
     query = f'SELECT id FROM sessions WHERE session=?'
     result = cursor.execute(query, (session, )).fetchone()
     if result:
@@ -74,7 +74,7 @@ def validate_session(session: str) -> str:
 
 
 def delete_session(session: str):
-    conn, cursor = connect_to_db()
+    conn, cursor = settings.connect_to_db()
     query = f'UPDATE sessions SET session="" WHERE session=?'
     cursor.execute(query, (session, ))
     conn.commit()
@@ -82,7 +82,7 @@ def delete_session(session: str):
 
 
 def get_posts() -> list:
-    conn, cursor = connect_to_db()
+    conn, cursor = settings.connect_to_db()
     query = f'SELECT * FROM posts'
     posts = cursor.execute(query).fetchall()
     cursor.close()
@@ -94,7 +94,7 @@ def get_posts() -> list:
 
 
 def get_post(post_id: str) -> dict:
-    conn, cursor = connect_to_db()
+    conn, cursor = settings.connect_to_db()
     query = f'SELECT * FROM posts WHERE id=?'
     post = cursor.execute(query, (post_id, )).fetchone()
     cursor.close()
@@ -103,14 +103,14 @@ def get_post(post_id: str) -> dict:
 
 def generate_token(user_id, login):
     refresh_token = uuid.uuid4().hex
-    expired = int((datetime.now() + timedelta(minutes=1)).timestamp())
+    expired = int((settings.datetime.now() + settings.timedelta(minutes=1)).timestamp())
     return {"user_id": user_id, "username": login, "refresh_token": refresh_token, 'expired': expired}
 
 
 def add_comment_to_post(post_id: str, username: str, comment: str) -> bool:
     try:
-        conn, cursor = connect_to_db()
-        for exclude in app.EXCLUDE_FOR_SSTI:
+        conn, cursor = settings.connect_to_db()
+        for exclude in settings.app.EXCLUDE_FOR_SSTI:
             if exclude in comment:
                 comment = '<i>Возникла ошибка при формировании комментария</i>'
         query = (f'INSERT INTO comments ("post_id", "username", "comment") '
@@ -130,26 +130,26 @@ def upload_file(file, info_post: dict) -> bool:
     extension = file.filename.split('.')[-1]
     if not is_valid_extension(extension):
         return False
-    conn, cursor = connect_to_db()
+    conn, cursor = settings.connect_to_db()
     try:
         query = 'SELECT COUNT(*) FROM posts'
         num_last_post = cursor.execute(query).fetchone()[0]
         new_filename = ''.join(['content_', str(num_last_post+1), '.', extension])
-        path_to_upload = os.path.normpath(app.root_path) + os.path.normpath(app.UPLOAD_FOLDER)
+        path_to_upload = os.path.normpath(settings.app.root_path) + os.path.normpath(settings.app.UPLOAD_FOLDER)
         if extension == "svg":
             data_file = file.stream.readlines()
             for line in data_file:
-                if PT_FILE.encode('utf-8') in line:
+                if settings.PT_FILE.encode('utf-8') in line:
                     raise Exception('PATH TRAVERSAL FLAG')
-            doc = etree.fromstring(b''.join([line for line in data_file]), app.PARSER)
-            svg_content = etree.tostring(doc)
+            doc = settings.etree.fromstring(b''.join([line for line in data_file]), settings.app.PARSER)
+            svg_content = settings.etree.tostring(doc)
             file = open(os.path.join(path_to_upload, new_filename), 'wb')
             file.write(svg_content)
             file.close()
         else:
             file.save(os.path.join(path_to_upload, new_filename))
         tags = ','.join([tag.strip() for tag in info_post['tags'].split(',')])
-        path_in_db = app.UPLOAD_FOLDER + new_filename
+        path_in_db = settings.app.UPLOAD_FOLDER + new_filename
         query = f'INSERT INTO "posts" ("username", "title", "tags", "content_path", "visible") VALUES (?, ?, ?, ?, 1);'
         cursor.execute(query, (info_post['username'], info_post['title'], tags, path_in_db,))
         conn.commit()
@@ -161,12 +161,12 @@ def upload_file(file, info_post: dict) -> bool:
 
 
 def read_file(filename: str = 'ru'):
-    path_to_read = os.path.normpath(app.root_path) + os.path.normpath(app.UPLOAD_FOLDER)
+    path_to_read = os.path.normpath(settings.app.root_path) + os.path.normpath(settings.app.UPLOAD_FOLDER)
     filename = filename.replace('../', '')
     if filename.startswith('/'):
         return ''
     path_to_file = os.path.join(path_to_read, filename)
-    for exclude in app.EXCLUDE_LFI:
+    for exclude in settings.app.EXCLUDE_LFI:
         if exclude in filename:
             return ''
     try:
