@@ -78,9 +78,11 @@ def search():
     data = request.form
     if 'filter' not in data:
         return redirect("/")
-    posts = search_posts(request.form.get('filter'), request.form.get('search'))
+    posts, msg = search_posts(request.form.get('filter'), request.form.get('search'))
+    if msg:
+        pass
     context = {"login": context_login, "username": username, "admin": [context_admin, FLAG_AUTH],
-               'posts': posts, "support": context_support}
+               'posts': posts, "support": context_support, "msg": msg}
     return make_response(render_template("index.html", context=context))
 
 

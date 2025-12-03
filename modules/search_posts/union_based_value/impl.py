@@ -1,7 +1,7 @@
 from utils import *
 
 
-def search_posts(column, value) -> list:
+def search_posts(column, value) -> tuple:
     data = []
 
     try:
@@ -16,7 +16,7 @@ def search_posts(column, value) -> list:
         for post in posts:
             data.append({'id': post[0], 'author': post[1], 'title': post[2],
                          'tags': post[3].split(','), 'path': post[4], 'visible': post[5]})
-        return sorted(data, key=lambda x: x['id'], reverse=True)
+        return sorted(data, key=lambda x: x['id'], reverse=True), ""
 
     except Exception as err:
         print(f"[?] {err}")

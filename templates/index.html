@@ -21,6 +21,11 @@
     {% if context.support.0 %}
     <span class="main post" style="text-align: center"><b>{{ context.support.1 }}</b></span>
     {% endif %}
+    {% if context.msg %}
+    <div class="main post">
+      <span style="text-align: center"><b>{{ context.msg }}</b></span>
+    </div>
+    {% endif %}
     {% for post in context.posts %}
     {% if post.visible != 0 %}
     <div class="main post">
