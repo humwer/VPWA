@@ -21,7 +21,7 @@ def upload_file(file, info_post: dict) -> tuple:
             data_file = file.stream.readlines()
             for line in data_file:
                 if settings.PT_FILE.encode('utf-8') in line:
-                    raise Exception('PATH TRAVERSAL FLAG')
+                    raise Exception('Этот файл не для чтения этой уязвимостью!')
             doc = settings.etree.fromstring(b''.join([line for line in data_file]), settings.app.PARSER)
             svg_content = settings.etree.tostring(doc)
             for line in data_file:
@@ -38,7 +38,6 @@ def upload_file(file, info_post: dict) -> tuple:
         cursor.execute(query, (info_post['username'], info_post['title'], tags, path_in_db,))
         conn.commit()
     except Exception as err:
-        print(f'[-] {err}')
         cursor.close()
-        return False, 'Что-то пошло не так...'
+        return False, f'Что-то пошло не так... Ошибка: {str(err)[:50]}'
     return True, 'Успешная загрузка поста!'

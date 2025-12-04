@@ -20,7 +20,8 @@ app.DB_NAME = 'sql.db'
 app.UPLOAD_FOLDER = '/static/'
 app.ALLOWED_EXTENSIONS = ('gif', 'jpg', 'jpeg', 'png', 'svg')
 app.ALLOWED_MIMETYPE = ('image/gif', 'image/jpeg', 'image/png', 'image/svg+xml')
-app.EXCLUDE_LFI = [':', '.py', '.ini', XXE_FILE]
+app.EXCLUDE_LFI = [':', '.py', '.ini', '.yml', '.sh', '.md', XXE_FILE]
+app.EXCLUDE_XXE = ['.py', '.ini', '.yml', '.sh', '.md', PT_FILE]
 app.EXCLUDE_FOR_SSTI = ('popen', 'write', 'os', 'import', 'mro', 'exec')
 # ----------------<
 app.config['flag'] = FLAG_SSTI

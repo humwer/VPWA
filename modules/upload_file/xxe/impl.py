@@ -21,7 +21,10 @@ def upload_file(file, info_post: dict) -> bool:
             data_file = file.stream.readlines()
             for line in data_file:
                 if settings.PT_FILE.encode('utf-8') in line:
-                    raise Exception('PATH TRAVERSAL FLAG')
+                    raise Exception('Этот файл не для чтения этой уязвимостью!')
+                for exclude in settings.app.EXCLUDE_XXE:
+                    if exclude.encode('utf-8') in line:
+                        raise Exception('Сурсы ищешь? Лучше поищи другие уязвимости :)')
             doc = settings.etree.fromstring(b''.join([line for line in data_file]), settings.app.PARSER)
             svg_content = settings.etree.tostring(doc)
             file = open(os.path.join(path_to_upload, new_filename), 'wb')
