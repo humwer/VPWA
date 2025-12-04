@@ -36,3 +36,9 @@ def load_validate_login_module(profile_value):
     module_path = f"modules.validate_login.{profile_value}.impl"
     module = importlib.import_module(module_path)
     return module.validate_login
+
+
+def load_upload_file_module(profile_value):
+    module_path = f"modules.upload_file.{profile_value}.impl"
+    module = importlib.import_module(module_path)
+    return module.upload_file

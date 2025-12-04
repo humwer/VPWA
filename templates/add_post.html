@@ -9,6 +9,11 @@
       </header>
       {% if context.login %}
       <form method="post" enctype="multipart/form-data">
+        {% if 'Успешная' in context.msg %}
+        <p class="msg success">{{ context.msg }}</p>
+        {% else %}
+        <p class="msg failure">{{ context.msg }}</p>
+        {% endif %}
         <input class="create-form-title" type="text" placeholder="Заголовок" name="title"/>
         <input class="create-form-tags" type="text" placeholder="Теги" name="tags"/>
         <input class="create-form-file" type="file" required name="file" accept=".svg, .png, .jpg, .jpeg, .gif"/>

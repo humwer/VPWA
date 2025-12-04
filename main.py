@@ -121,7 +121,7 @@ def new_post():
     if username:
         context_login = True
     context_admin = validate_role(request.cookies.get('session'), 'admin')
-    context = {"login": context_login, "username": username, "admin": [context_admin, FLAG_AUTH]}
+    context = {"login": context_login, "username": username, "admin": [context_admin, FLAG_AUTH], "msg": ""}
     if request.method == "GET":
         return make_response(render_template("add_post.html", context=context))
     else:
@@ -129,7 +129,8 @@ def new_post():
             return make_response(render_template("add_post.html", context=context))
         info_post = request.form.to_dict()
         info_post['username'] = username
-        upload_file(request.files['file'], info_post)
+        is_ok, msg = upload_file(request.files['file'], info_post)
+        context['msg'] = msg
         return make_response(render_template("add_post.html", context=context))
 
 

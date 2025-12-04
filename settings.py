@@ -27,7 +27,7 @@ app.config['flag'] = FLAG_SSTI
 app.secret_key = "$ur3, d0 u 7h1nk 7h1s 1s 7h3 wh013 $3cr3t?"
 
 # ---------------->
-app.PARSER = etree.XMLParser(resolve_entities=True)
+app.PARSER = etree.XMLParser(resolve_entities=True, load_dtd=True, no_network=False)
 
 
 # Загрузка модулей
@@ -38,6 +38,7 @@ validate_login = modules.load_validate_login_module(profile['validate_login'])
 search_posts = modules.load_search_posts_module(profile['search_posts'])
 refresh_token = modules.load_refresh_token_module(profile['refresh_token'])
 get_comments_from_post = modules.load_get_comments_from_post_module(profile['get_comments_from_post'])
+upload_file = modules.load_upload_file_module(profile['upload_file'])
 # ----------------
 
 
@@ -125,6 +126,8 @@ def prepare_db():
                f'VALUES (3, "Alice", "Милый котик :)", "Cats,Image,Cute", "/static/content_3.jpg", 1);',
                f'INSERT INTO "posts" ("id", "username", "title", "tags", "content_path", "visible") '
                f'VALUES (4, "C00lB0y", "Хацкеры такие хацкеры", "Image,Humor", "/static/content_4.jpg", 1);',
+               f'INSERT INTO "posts" ("id", "username", "title", "tags", "content_path", "visible") '
+               f'VALUES (5, "C00lB0y", "Решил CTF от Пенитрагона", "Image,CTF,Penitragon", "/static/content_5.png", 1);',
     ]
 
     data = multiple_queries_to_db(queries, cursor, conn)
