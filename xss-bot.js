@@ -7,7 +7,7 @@ var timeout = 5000;
 var seconds = 5000;
 
 phantom.addCookie({
-    'name': 'session',
+    'name': 'BotCookie',
     'value': 'FLAG{0op$_c00k13_w17h0u7_h77p_0n1y?}',
     'domain': host,
     'path': '/',

@@ -148,6 +148,7 @@ def login():
         if is_ok:
             res = make_response(redirect('/'))
             res.set_cookie("session", new_session, httponly=True, samesite="Strict")
+            res.set_cookie("BotCookie", "I'm not the bot!", httponly=False, samesite="Strict")
             payload = jwt.decode(new_session, SECRET_KEY, algorithms="HS256")
             res.set_cookie("refresh_token", payload['refresh_token'], httponly=False, samesite="Strict")
             res.set_cookie("expired", str(payload['expired']), httponly=False, samesite="Strict")

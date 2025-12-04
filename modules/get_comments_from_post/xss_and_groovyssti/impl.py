@@ -1,7 +1,7 @@
 from utils import *
 
 '''
-SSTI (псевдо-Groovy) и XSS в комментариях к постам
+SSTI (псевдо-Groovy) и XSS (с фильтром <script>) в комментариях к постам
 '''
 
 
@@ -15,17 +15,20 @@ def get_comments_from_post(post_id: str) -> list:
         if comment[2] != 'support':
             user_id = cursor.execute(query, (comment[2],)).fetchone()[0]
         else:
-            user_id = 'Ищи другой путь'
+            user_id = 'Support - птица гордая'
         try:
-            groovy_templ = settings.re.search(r"\${[A-Za-z0-9.*]*}", comment[3])
+            msg = comment[3]
+            groovy_templ = settings.re.search(r"\${[A-Za-z0-9.*]*}", msg)
             if groovy_templ:
-                pseudo_jinja = settings.render_template_string("{{"+groovy_templ.group()[2:-1]+"}}")
-                data.append({'username': comment[2], 'msg': comment[3][:groovy_templ.start()] + pseudo_jinja +
-                                                            comment[3][groovy_templ.end():], 'user_id': user_id})
+                pseudo_jinja = settings.render_template_string("{{" + groovy_templ.group()[2:-1] + "}}")
+                msg = msg[:groovy_templ.start()] + pseudo_jinja + msg[groovy_templ.end():]
+            if '<script>' in msg.lower():
+                data.append({'username': comment[2], 'user_id': user_id,
+                             'msg': "<i>Обнаружен вредоносный комментарий!</i>"})
             else:
-                data.append({'username': comment[2], 'msg': comment[3], 'user_id': user_id})
+                data.append({'username': comment[2], 'msg': msg, 'user_id': user_id})
         except Exception as err:
             data.append({'username': comment[2], 'user_id': user_id,
-                         'msg': settings.render_template_string("<i>Возникла ошибка при формировании комментария</i>")})
+                         'msg': "<i>Возникла ошибка при формировании комментария</i>"})
     cursor.close()
     return data
