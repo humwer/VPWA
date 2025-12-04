@@ -34,6 +34,7 @@ app.PARSER = etree.XMLParser(resolve_entities=True)
 # ----------------
 profile = modules.read_profile()
 validate_registration = modules.load_validation_registration_module(profile['validate_registration'])
+validate_login = modules.load_validate_login_module(profile['validate_login'])
 search_posts = modules.load_search_posts_module(profile['search_posts'])
 refresh_token = modules.load_refresh_token_module(profile['refresh_token'])
 get_comments_from_post = modules.load_get_comments_from_post_module(profile['get_comments_from_post'])

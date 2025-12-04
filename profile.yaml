@@ -1,4 +1,5 @@
 validate_registration: disabled # (insecure, patched, disabled)
+validate_login: booleansql # (patched, booleansql)
 search_posts: jinjassti_value # (booleansql_column, booleansql_value, unionsql_column, unionsql_value, jinjassti_value, groovyssti_value, codepenssti_value)
 refresh_token: insecure # (insecure, patched)
 get_comments_from_post: xss_and_codepenssti # (xss_and_jinjassti, xss_and_groovyssti, xss_and_codepenssti, only_xss)

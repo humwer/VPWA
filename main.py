@@ -144,7 +144,7 @@ def login():
         return make_response(render_template("login.html", context=context))
     else:
         time.sleep(1.5)
-        is_ok, new_session = validate_login(request.form.get('login'), request.form.get('password'))
+        is_ok, new_session, msg = validate_login(request.form.get('login'), request.form.get('password'))
         if is_ok:
             res = make_response(redirect('/'))
             res.set_cookie("session", new_session, httponly=True, samesite="Strict")
@@ -154,7 +154,6 @@ def login():
             res.set_cookie("user_id", str(payload['user_id']), httponly=False, samesite="Strict")
             return res
         else:
-            msg = 'Неверный логин/пароль'
             context['msg'] = msg
             return make_response(render_template("login.html", context=context))
 

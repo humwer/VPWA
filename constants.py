@@ -8,7 +8,7 @@ SECRET_KEY = 'w0wth1s1$Sup3R$3CR37K3y!!!'
 RAND_FLAG_TABLE = random.randint(0, 9)
 
 # Flags
-FLAG_AUTH = "FLAG{N3w_func710n_4_r3g1$7r4710n!}"
+FLAG_AUTH = "FLAG{1N$3cUr3_@u7H!}"
 FLAG_BRUTEHASH = "FLAG{W34k_p@$$w0rd_1$_7r0bl3!}"
 FLAG_SQLI = "FLAG{D0_u_l1k3_$QL_1nj3c710n$?}"
 FLAG_XSS = "FLAG{0op$_c00k13_w17h0u7_h77p_0n1y?}"

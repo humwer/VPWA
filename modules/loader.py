@@ -30,3 +30,9 @@ def load_get_comments_from_post_module(profile_value):
     module_path = f"modules.get_comments_from_post.{profile_value}.impl"
     module = importlib.import_module(module_path)
     return module.get_comments_from_post
+
+
+def load_validate_login_module(profile_value):
+    module_path = f"modules.validate_login.{profile_value}.impl"
+    module = importlib.import_module(module_path)
+    return module.validate_login
