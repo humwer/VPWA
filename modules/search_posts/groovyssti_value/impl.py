@@ -23,6 +23,9 @@ def search_posts(column, value) -> tuple:
             return sorted(data, key=lambda x: x['id'], reverse=True), ""
         groovy_templ = settings.re.search(r"\${[A-Za-z0-9.*]*}", value)
         if groovy_templ:
+            for exclude in settings.app.EXCLUDE_FOR_SSTI:
+                if exclude in groovy_templ:
+                    return sorted(data, key=lambda x: x['id'], reverse=True), f"Не-не-не, никаких RCE :)"
             pseudo_jinja = settings.render_template_string("{{" + groovy_templ.group()[2:-1] + "}}")
             value = value[:groovy_templ.start()] + pseudo_jinja + value[groovy_templ.end():]
         return sorted(data, key=lambda x: x['id'], reverse=True), f"Не был найден пост с {value}"
