@@ -1,5 +1,9 @@
 from utils import *
 
+'''
+Имеется возможность перерегистрации (смена пароля) пользователя при обходе проверки (регистр) имени пользователя
+'''
+
 
 def validate_registration(login: str, password: str, confirm_password: str) -> tuple:
     if not is_login(login):

@@ -1,5 +1,9 @@
 from utils import *
 
+'''
+Только XSS в комментариях к постам
+'''
+
 
 def get_comments_from_post(post_id: str) -> list:
     conn, cursor = settings.connect_to_db()

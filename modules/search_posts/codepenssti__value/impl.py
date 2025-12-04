@@ -1,5 +1,9 @@
 from utils import *
 
+'''
+SSTI Injection (псевдо Codepen) при поиске в параметре search
+'''
+
 
 def search_posts(column, value) -> tuple:
     data = []

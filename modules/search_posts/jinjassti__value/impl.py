@@ -1,5 +1,9 @@
 from utils import *
 
+'''
+SSTI Injection (Jinja) при поиске в параметре search
+'''
+
 
 def search_posts(column, value) -> tuple:
     data = []

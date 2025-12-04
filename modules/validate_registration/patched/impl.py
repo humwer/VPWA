@@ -1,5 +1,9 @@
 from utils import *
 
+'''
+Безопасная реализация регистрации
+'''
+
 
 def validate_registration(login: str, password: str, confirm_password: str) -> tuple:
     if not is_login(login):

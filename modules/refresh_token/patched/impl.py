@@ -1,5 +1,9 @@
 from utils import *
 
+'''
+Безопасное обновление JWT-токен
+'''
+
 
 def refresh_token(jwt_token, ref_token, user_id):
     jwt_token = jwt.decode(jwt_token, settings.SECRET_KEY, algorithms="HS256")

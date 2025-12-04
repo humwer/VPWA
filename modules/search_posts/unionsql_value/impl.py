@@ -1,5 +1,9 @@
 from utils import *
 
+'''
+Union-based SQLi при поиске постов в параметре search
+'''
+
 
 def search_posts(column, value) -> tuple:
     data = []
